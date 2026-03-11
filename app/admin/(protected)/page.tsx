@@ -1,6 +1,14 @@
 import { getAdminStats } from "@/lib/queries";
 import Link from "next/link";
-import { Film, Users, Tag, Eye, TrendingUp, Upload, ArrowRight } from "lucide-react";
+import {
+  FilmStrip,
+  Users,
+  Tag,
+  Eye,
+  ChartLine,
+  UploadSimple,
+  ArrowRight,
+} from "@phosphor-icons/react/dist/ssr";
 
 export default async function AdminOverviewPage() {
   const stats = await getAdminStats();
@@ -17,16 +25,16 @@ export default async function AdminOverviewPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {[
-          { label: "Total Frames", value: stats.totalFrames,                icon: Film,  href: "/admin/content",    accent: "border-l-[3px] border-l-blue-500"    },
-          { label: "Total Views",  value: stats.totalViews.toLocaleString(), icon: Eye,   href: null,                accent: "border-l-[3px] border-l-violet-500"  },
-          { label: "Creators",     value: stats.totalCreators,               icon: Users, href: "/admin/creators",   accent: "border-l-[3px] border-l-emerald-500" },
-          { label: "Categories",   value: stats.totalCategories,             icon: Tag,   href: "/admin/categories", accent: "border-l-[3px] border-l-amber-500"   },
+          { label: "Total Frames", value: stats.totalFrames,                icon: FilmStrip, href: "/admin/content",    accent: "border-l-[3px] border-l-blue-500"    },
+          { label: "Total Views",  value: stats.totalViews.toLocaleString(), icon: Eye,       href: null,                accent: "border-l-[3px] border-l-violet-500"  },
+          { label: "Creators",     value: stats.totalCreators,               icon: Users,     href: "/admin/creators",   accent: "border-l-[3px] border-l-emerald-500" },
+          { label: "Categories",   value: stats.totalCategories,             icon: Tag,       href: "/admin/categories", accent: "border-l-[3px] border-l-amber-500"   },
         ].map(({ label, value, icon: Icon, href, accent }) => (
           <div key={label} className={`admin-card p-5 flex flex-col gap-3 ${accent}`}>
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-semibold text-muted uppercase tracking-wider">{label}</p>
               <span className="p-1.5 rounded-lg bg-surface-hover">
-                <Icon size={13} className="text-muted" />
+                <Icon size={13} weight="regular" className="text-muted" />
               </span>
             </div>
             <p className="text-[28px] font-semibold tracking-tight leading-none">{value}</p>
@@ -36,7 +44,7 @@ export default async function AdminOverviewPage() {
                 className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-foreground transition-colors group"
               >
                 View all
-                <ArrowRight size={10} className="transition-transform duration-150 group-hover:translate-x-0.5" />
+                <ArrowRight size={10} weight="regular" className="transition-transform duration-150 group-hover:translate-x-0.5" />
               </Link>
             )}
           </div>
@@ -48,12 +56,12 @@ export default async function AdminOverviewPage() {
         {/* Top performing frames */}
         <div className="admin-card p-5">
           <div className="flex items-center gap-2 mb-5">
-            <TrendingUp size={14} className="text-muted" />
+            <ChartLine size={14} weight="regular" className="text-muted" />
             <h2 className="text-[13px] font-semibold">Top Performing Frames</h2>
           </div>
           {stats.topFrames.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <Film size={22} className="text-muted/40 mb-2" />
+              <FilmStrip size={22} weight="regular" className="text-muted/40 mb-2" />
               <p className="text-[13px] text-muted">No frames yet.</p>
             </div>
           ) : (
@@ -94,10 +102,10 @@ export default async function AdminOverviewPage() {
           <h2 className="text-[13px] font-semibold mb-5">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { href: "/admin/upload",     label: "Upload Frame",    icon: Upload, primary: true },
-              { href: "/admin/content",    label: "Manage Content",  icon: Film   },
-              { href: "/admin/creators",   label: "Add Creator",     icon: Users  },
-              { href: "/admin/categories", label: "Edit Categories", icon: Tag    },
+              { href: "/admin/upload",     label: "Upload Frame",    icon: UploadSimple, primary: true },
+              { href: "/admin/content",    label: "Manage Content",  icon: FilmStrip                  },
+              { href: "/admin/creators",   label: "Add Creator",     icon: Users                      },
+              { href: "/admin/categories", label: "Edit Categories", icon: Tag                        },
             ].map(({ href, label, icon: Icon, primary }) => (
               <Link
                 key={href}
@@ -108,7 +116,7 @@ export default async function AdminOverviewPage() {
                     : "border border-border hover:bg-surface-hover"
                 }`}
               >
-                <Icon size={14} className={primary ? "opacity-70" : "text-muted"} />
+                <Icon size={14} weight="regular" className={primary ? "opacity-70" : "text-muted"} />
                 {label}
               </Link>
             ))}

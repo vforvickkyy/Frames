@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Tag } from "@/types";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash } from "@phosphor-icons/react";
 
 function slugify(str: string) {
   return str
@@ -85,7 +85,7 @@ export default function TagsManager({ tags: initial }: { tags: Tag[] }) {
               onClick={() => handleDelete(tag.id)}
               className="text-muted hover:text-red-500 transition-colors"
             >
-              <Trash2 size={12} />
+              <Trash size={12} weight="regular" />
             </button>
           </div>
         ))}

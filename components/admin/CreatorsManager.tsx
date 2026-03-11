@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import type { Creator } from "@/types";
-import { Plus, Trash2, ExternalLink, X } from "lucide-react";
+import { Plus, Trash, ArrowSquareOut, X } from "@phosphor-icons/react";
 
 interface NewCreator {
   username: string;
@@ -202,13 +202,13 @@ export default function CreatorsManager({
                         target="_blank"
                         className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
                       >
-                        <ExternalLink size={14} />
+                        <ArrowSquareOut size={14} weight="regular" />
                       </Link>
                       <button
                         onClick={() => handleDelete(creator.id)}
                         className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-muted hover:text-red-500 transition-colors"
                       >
-                        <Trash2 size={14} />
+                        <Trash size={14} weight="regular" />
                       </button>
                     </div>
                   </td>

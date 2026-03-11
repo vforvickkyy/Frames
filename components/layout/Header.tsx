@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Search, Sun, Moon, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MagnifyingGlass, Moon, Sun } from "@phosphor-icons/react";
 
 const navLinks = [
   { href: "/", label: "Discover" },
@@ -14,29 +15,19 @@ const navLinks = [
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [scrolled, setScrolled] = useState(false);
-  const [dark, setDark] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [dark, setDark] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Read saved theme on mount
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = saved ? saved === "dark" : prefersDark;
+    const isDark = saved ? saved !== "light" : true;
     setDark(isDark);
     document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
   }, []);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   function toggleTheme() {
     const next = !dark;
@@ -50,95 +41,120 @@ export default function Header() {
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       setQuery("");
+      setSearchFocused(false);
     }
   }
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 site-nav ${scrolled ? "scrolled" : ""}`}>
-      <div className="max-w-7xl mx-auto px-5">
-        <div className="flex items-center gap-4 h-15">
+    <motion.header
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b"
+      style={{
+        background: "color-mix(in srgb, var(--bg) 80%, transparent)",
+        borderColor: "var(--border)",
+        height: 52,
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-5 h-full flex items-center gap-6">
 
-          {/* Logo */}
-          <Link href="/" className="nav-logo shrink-0 text-[15px] font-bold tracking-tight hover:opacity-70 transition-opacity">
-            Frames
-          </Link>
+        {/* Logo */}
+        <Link
+          href="/"
+          className="shrink-0 text-[14px] font-semibold tracking-tight transition-opacity hover:opacity-60"
+          style={{ color: "var(--text)" }}
+        >
+          Frames
+        </Link>
 
-          {/* Search bar — centered, always visible */}
-          <form onSubmit={handleSearch} className="flex-1 max-w-125 mx-auto">
-            <div className="nav-search-box flex items-center gap-2 px-4 py-2 rounded-full">
-              <Search size={15} className="nav-search-icon shrink-0" />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search frames…"
-                className="nav-search-input flex-1 text-[13px] outline-none"
-              />
-            </div>
-          </form>
-
-          {/* Right: nav links + theme toggle */}
-          <div className="shrink-0 hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors duration-150 ${
-                  pathname === link.href ? "nav-link-active" : "nav-link"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="nav-icon-btn ml-1 p-2 rounded-full transition-colors duration-150"
-              aria-label="Toggle theme"
+        {/* Nav links */}
+        <nav className="hidden md:flex items-center gap-1 shrink-0">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="px-3 py-1.5 rounded-lg text-sm transition-colors duration-150"
+              style={{
+                color: pathname === link.href ? "var(--text)" : "var(--text-muted)",
+              }}
             >
-              {dark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-          </div>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-          {/* Mobile: theme toggle + hamburger */}
-          <div className="flex md:hidden items-center gap-1 shrink-0 ml-auto">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="nav-icon-btn p-2 rounded-full transition-colors duration-150"
-              aria-label="Toggle theme"
-            >
-              {dark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-            <button
-              type="button"
-              className="nav-icon-btn p-2 rounded-full transition-colors duration-150"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X size={16} /> : <Menu size={16} />}
-            </button>
-          </div>
-        </div>
+        {/* Search — center, expands on focus */}
+        <form onSubmit={handleSearch} className="flex-1 flex justify-center">
+          <motion.div
+            animate={{ width: searchFocused ? 460 : 380 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="relative flex items-center"
+          >
+            <MagnifyingGlass
+              size={15}
+              weight="regular"
+              className="absolute left-3.5 pointer-events-none"
+              style={{ color: "var(--text-muted)" }}
+            />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              placeholder="Search frames…"
+              className="header-search-input w-full pl-9 pr-4 py-1.5 rounded-full text-sm"
+            />
+          </motion.div>
+        </form>
 
-        {/* Mobile nav */}
-        {mobileOpen && (
-          <nav className="md:hidden nav-mobile-border py-3 pb-4 flex flex-col gap-0.5 slide-down">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-2.5 text-[13px] font-medium rounded-xl transition-colors duration-150 ${
-                  pathname === link.href ? "nav-mobile-link-active" : "nav-mobile-link"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        )}
+        {/* Theme toggle */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="header-icon-btn shrink-0 p-1.5 rounded-lg transition-opacity hover:opacity-60"
+          aria-label="Toggle theme"
+        >
+          {dark
+            ? <Sun size={18} weight="regular" />
+            : <Moon size={18} weight="regular" />
+          }
+        </button>
+
+        {/* Mobile menu toggle */}
+        <button
+          type="button"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="header-icon-btn md:hidden shrink-0 text-sm transition-opacity hover:opacity-60"
+        >
+          {mobileOpen ? "✕" : "☰"}
+        </button>
       </div>
-    </header>
+
+      {/* Mobile nav */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18 }}
+            className="header-mobile-nav md:hidden px-5 pb-3 flex flex-col gap-0.5"
+          >
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="px-3 py-2 rounded-lg text-sm transition-colors"
+                style={{ color: pathname === link.href ? "var(--text)" : "var(--text-muted)" }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }

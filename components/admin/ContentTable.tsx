@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import type { Frame } from "@/types";
-import { Eye, EyeOff, Trash2, Edit, ExternalLink } from "lucide-react";
+import { Eye, EyeSlash, Trash, ArrowSquareOut } from "@phosphor-icons/react";
 
 interface ContentTableProps {
   frames: Frame[];
@@ -158,7 +158,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                     className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
                     title="View"
                   >
-                    <ExternalLink size={14} />
+                    <ArrowSquareOut size={14} weight="regular" />
                   </Link>
                   <button
                     onClick={() => toggleHidden(frame)}
@@ -166,7 +166,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                     className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
                     title={frame.is_hidden ? "Show" : "Hide"}
                   >
-                    {frame.is_hidden ? <Eye size={14} /> : <EyeOff size={14} />}
+                    {frame.is_hidden ? <Eye size={14} weight="regular" /> : <EyeSlash size={14} weight="regular" />}
                   </button>
                   <button
                     onClick={() => deleteFrame(frame)}
@@ -174,7 +174,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                     className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-muted hover:text-red-500 transition-colors"
                     title="Delete"
                   >
-                    <Trash2 size={14} />
+                    <Trash size={14} weight="regular" />
                   </button>
                 </div>
               </td>

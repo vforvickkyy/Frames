@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Category, Tag } from "@/types";
-import { Upload, X, Check } from "lucide-react";
+import { UploadSimple, X, Check } from "@phosphor-icons/react";
 
 interface UploadFormProps {
   categories: Category[];
@@ -204,7 +204,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2 text-muted">
-            <Upload size={28} />
+            <UploadSimple size={28} weight="regular" />
             <p className="text-sm font-medium">Drop a file or click to upload</p>
             <p className="text-xs">GIF, JPG, PNG, MP4, WebM — up to 50 MB</p>
           </div>
@@ -375,7 +375,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
           "Uploading…"
         ) : (
           <>
-            <Upload size={16} /> Upload Frame
+            <UploadSimple size={16} weight="regular" /> Upload Frame
           </>
         )}
       </button>

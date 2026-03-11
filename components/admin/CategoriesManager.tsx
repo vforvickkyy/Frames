@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Category } from "@/types";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash } from "@phosphor-icons/react";
 
 function slugify(str: string) {
   return str
@@ -102,7 +102,7 @@ export default function CategoriesManager({
               onClick={() => handleDelete(cat.id)}
               className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-muted hover:text-red-500 shrink-0 transition-colors"
             >
-              <Trash2 size={14} />
+              <Trash size={14} weight="regular" />
             </button>
           </div>
         ))}

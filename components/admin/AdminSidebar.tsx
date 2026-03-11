@@ -3,22 +3,22 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard,
-  Upload,
-  Film,
+  SquaresFour,
+  UploadSimple,
+  FilmStrip,
   Tag,
   Users,
-  LogOut,
+  SignOut,
   ArrowLeft,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
-  { href: "/admin/upload", label: "Upload", icon: Upload },
-  { href: "/admin/content", label: "Manage Content", icon: Film },
-  { href: "/admin/categories", label: "Categories & Tags", icon: Tag },
-  { href: "/admin/creators", label: "Creators", icon: Users },
+  { href: "/admin",            label: "Overview",         icon: SquaresFour,  exact: true },
+  { href: "/admin/upload",     label: "Upload",           icon: UploadSimple             },
+  { href: "/admin/content",    label: "Manage Content",   icon: FilmStrip                },
+  { href: "/admin/categories", label: "Categories & Tags",icon: Tag                      },
+  { href: "/admin/creators",   label: "Creators",         icon: Users                    },
 ];
 
 interface AdminSidebarProps {
@@ -44,7 +44,7 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
           href="/"
           className="admin-back-link inline-flex items-center gap-1.5 text-[12px] mb-4 group"
         >
-          <ArrowLeft size={12} className="transition-transform duration-150 group-hover:-translate-x-0.5" />
+          <ArrowLeft size={12} weight="regular" className="transition-transform duration-150 group-hover:-translate-x-0.5" />
           Back to site
         </Link>
         <p className="admin-title text-[13px] font-semibold">Frames Admin</p>
@@ -66,7 +66,7 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
                 active ? "admin-nav-link-active" : "admin-nav-link"
               }`}
             >
-              <Icon size={14} className="shrink-0" />
+              <Icon size={15} weight="regular" className="shrink-0" />
               {label}
             </Link>
           );
@@ -74,13 +74,13 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
       </nav>
 
       {/* Sign out */}
-      <div className="admin-sidebar-footer p-3">
+      <div className="p-3">
         <button
           type="button"
           onClick={handleSignOut}
           className="admin-nav-link w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px]"
         >
-          <LogOut size={14} />
+          <SignOut size={15} weight="regular" />
           Sign out
         </button>
       </div>

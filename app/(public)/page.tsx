@@ -10,6 +10,8 @@ import FrameCard from "@/components/frames/FrameCard";
 import CategoryPills from "@/components/ui/CategoryPills";
 import EmptyState from "@/components/ui/EmptyState";
 import { FrameCardSkeleton } from "@/components/ui/Skeletons";
+import HomeHero from "@/components/ui/HomeHero";
+import RevealSection from "@/components/ui/RevealSection";
 
 export default async function HomePage() {
   const [{ frames, hasMore }, trending, recent, categories] =
@@ -21,47 +23,48 @@ export default async function HomePage() {
     ]);
 
   return (
-    <div className="max-w-7xl mx-auto px-5 w-full">
+    <>
+      {/* ── Hero ─────────────────────────────────── */}
+      <HomeHero />
 
-      {/* ── Page title + category pills ──────────────── */}
-      <section className="pt-8 pb-6">
-        <h1 className="page-title text-3xl font-bold tracking-tight mb-5">
-          Discover
-        </h1>
+      {/* ── Category pills ──────────────────────── */}
+      <div className="max-w-7xl mx-auto px-6 mb-12">
         <CategoryPills categories={categories} />
-      </section>
+      </div>
 
-      {/* ── Trending ─────────────────────────────────── */}
+      {/* ── Trending ─────────────────────────────── */}
       {trending.length > 0 && (
-        <section className="mb-10 section-reveal">
-          <SectionLabel title="Trending" />
-          <div className="masonry-grid">
+        <RevealSection className="max-w-7xl mx-auto px-6 mb-14">
+          <p className="section-faint text-[11px] uppercase tracking-[0.12em] mb-4">
+            Trending
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {trending.map((frame) => (
-              <div key={frame.id} className="masonry-item">
-                <FrameCard frame={frame} priority />
-              </div>
+              <FrameCard key={frame.id} frame={frame} priority />
             ))}
           </div>
-        </section>
+        </RevealSection>
       )}
 
-      {/* ── Recently Added ───────────────────────────── */}
+      {/* ── Recently Added ───────────────────────── */}
       {recent.length > 0 && (
-        <section className="mb-10 section-reveal">
-          <SectionLabel title="Recently Added" />
-          <div className="masonry-grid">
+        <RevealSection className="max-w-7xl mx-auto px-6 mb-14">
+          <p className="section-faint text-[11px] uppercase tracking-[0.12em] mb-4">
+            Recently Added
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {recent.map((frame) => (
-              <div key={frame.id} className="masonry-item">
-                <FrameCard frame={frame} />
-              </div>
+              <FrameCard key={frame.id} frame={frame} />
             ))}
           </div>
-        </section>
+        </RevealSection>
       )}
 
-      {/* ── All Frames — infinite scroll ─────────────── */}
-      <section className="mb-20">
-        <SectionLabel title="All Frames" />
+      {/* ── All Frames ───────────────────────────── */}
+      <RevealSection className="max-w-7xl mx-auto px-6 mb-20">
+        <p className="section-faint text-[11px] uppercase tracking-[0.12em] mb-4">
+          All Frames
+        </p>
         {frames.length === 0 ? (
           <EmptyState
             title="No frames yet"
@@ -84,15 +87,7 @@ export default async function HomePage() {
             />
           </Suspense>
         )}
-      </section>
-    </div>
-  );
-}
-
-function SectionLabel({ title }: { title: string }) {
-  return (
-    <h2 className="section-label text-2xl font-bold tracking-tight mb-4">
-      {title}
-    </h2>
+      </RevealSection>
+    </>
   );
 }

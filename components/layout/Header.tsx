@@ -21,7 +21,7 @@ export default function Header() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 4);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -52,32 +52,28 @@ export default function Header() {
   }
 
   return (
-    <header
-      className={`sticky top-0 z-50 glass border-b transition-all duration-300 ${
-        scrolled ? "header-scrolled" : "border-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[3.5rem]">
+    <header className={`fixed top-0 left-0 right-0 z-50 nav-glass transition-all duration-300 ${scrolled ? "scrolled" : ""}`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center justify-between h-14">
 
           {/* Logo */}
           <Link
             href="/"
-            className="text-[15px] font-semibold tracking-tight hover:opacity-50 transition-opacity duration-200"
+            className="text-[15px] font-semibold tracking-tight text-white/90 hover:text-white transition-colors duration-200"
           >
             Frames
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-0.5">
+          {/* Desktop nav — centered */}
+          <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 ${
+                className={`px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200 ${
                   pathname === link.href
-                    ? "text-foreground bg-surface-hover"
-                    : "text-muted hover:text-foreground hover:bg-surface-hover"
+                    ? "text-white bg-white/10"
+                    : "text-white/50 hover:text-white/90 hover:bg-white/8"
                 }`}
               >
                 {link.label}
@@ -86,11 +82,11 @@ export default function Header() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-1">
             {searchOpen ? (
               <form
                 onSubmit={handleSearch}
-                className="flex items-center gap-1 fade-in-fast"
+                className="flex items-center gap-1.5 fade-in-fast"
               >
                 <input
                   ref={inputRef}
@@ -99,14 +95,16 @@ export default function Header() {
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Escape" && closeSearch()}
                   placeholder="Search frames…"
-                  className="w-44 sm:w-56 px-3 py-1.5 text-[13px] rounded-lg border border-border outline-none
-                             focus:ring-2 focus:ring-foreground/15 focus:border-foreground/30
-                             bg-surface text-foreground placeholder:text-muted transition-all duration-200"
+                  className="w-48 sm:w-60 px-3.5 py-1.5 text-[13px] rounded-full
+                             bg-white/8 border border-white/15 text-white/90
+                             placeholder:text-white/35 outline-none
+                             focus:bg-white/12 focus:border-white/30
+                             transition-all duration-200"
                 />
                 <button
                   type="button"
                   onClick={closeSearch}
-                  className="p-2 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
+                  className="p-2 rounded-full text-white/40 hover:text-white/80 hover:bg-white/8 transition-all"
                   aria-label="Close search"
                 >
                   <X size={15} />
@@ -116,7 +114,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="p-2 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
+                className="p-2 rounded-full text-white/40 hover:text-white/80 hover:bg-white/8 transition-all duration-200"
                 aria-label="Open search"
               >
                 <Search size={16} />
@@ -125,7 +123,7 @@ export default function Header() {
 
             <button
               type="button"
-              className="md:hidden p-2 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
+              className="md:hidden p-2 rounded-full text-white/40 hover:text-white/80 hover:bg-white/8 transition-all"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
@@ -138,15 +136,15 @@ export default function Header() {
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <nav className="md:hidden py-2 pb-3 border-t border-border flex flex-col gap-0.5 slide-down">
+          <nav className="md:hidden py-3 pb-4 border-t border-white/8 flex flex-col gap-0.5 slide-down">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-2.5 text-[13px] font-medium rounded-xl transition-colors duration-150 ${
+                className={`px-3 py-2.5 text-[13px] font-medium rounded-xl transition-all duration-150 ${
                   pathname === link.href
-                    ? "bg-surface-hover text-foreground"
-                    : "text-muted hover:text-foreground hover:bg-surface-hover"
+                    ? "bg-white/10 text-white"
+                    : "text-white/50 hover:text-white hover:bg-white/8"
                 }`}
               >
                 {link.label}

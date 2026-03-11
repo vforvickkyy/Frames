@@ -36,24 +36,24 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
   }
 
   return (
-    <aside className="w-[220px] shrink-0 flex flex-col border-r border-border bg-surface min-h-screen">
+    <aside className="w-[220px] shrink-0 flex flex-col border-r border-white/8 bg-[#0d0d0d] min-h-screen">
 
       {/* Header */}
-      <div className="px-4 pt-5 pb-4 border-b border-border">
+      <div className="px-4 pt-5 pb-4 border-b border-white/8">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors mb-4 group"
+          className="inline-flex items-center gap-1.5 text-[12px] text-white/35 hover:text-white/70 transition-colors mb-4 group"
         >
           <ArrowLeft size={12} className="transition-transform duration-150 group-hover:-translate-x-0.5" />
           Back to site
         </Link>
-        <p className="text-[13px] font-semibold text-foreground">Frames Admin</p>
-        <p className="text-[11px] text-muted truncate mt-0.5">{userEmail}</p>
+        <p className="text-[13px] font-semibold text-white/80">Frames Admin</p>
+        <p className="text-[11px] text-white/30 truncate mt-0.5">{userEmail}</p>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 p-3 space-y-0.5">
-        <p className="text-[10px] font-semibold text-muted uppercase tracking-wider px-2 pt-1 pb-2">
+        <p className="text-[10px] font-semibold text-white/25 uppercase tracking-wider px-2 pt-1 pb-2">
           Menu
         </p>
         {navItems.map(({ href, label, icon: Icon, exact }) => {
@@ -64,8 +64,8 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
               href={href}
               className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 ${
                 active
-                  ? "bg-foreground text-background"
-                  : "text-muted hover:text-foreground hover:bg-surface-hover"
+                  ? "bg-white/10 text-white"
+                  : "text-white/40 hover:text-white/80 hover:bg-white/6"
               }`}
             >
               <Icon size={14} className="shrink-0" />
@@ -76,11 +76,11 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
       </nav>
 
       {/* Sign out */}
-      <div className="p-3 border-t border-border">
+      <div className="p-3 border-t border-white/8">
         <button
           type="button"
           onClick={handleSignOut}
-          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] text-muted hover:text-foreground hover:bg-surface-hover transition-all duration-150"
+          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] text-white/30 hover:text-white/70 hover:bg-white/6 transition-all duration-150"
         >
           <LogOut size={14} />
           Sign out

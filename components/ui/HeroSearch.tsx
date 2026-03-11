@@ -19,16 +19,18 @@ export default function HeroSearch() {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`flex items-center max-w-lg mx-auto bg-surface border rounded-2xl overflow-hidden transition-all duration-300 ${
-        focused
-          ? "border-foreground/30 shadow-lg shadow-foreground/8"
-          : "border-border shadow-sm"
-      }`}
+      className={`flex items-center max-w-xl mx-auto rounded-full overflow-hidden
+                  transition-all duration-300 ease-out
+                  bg-white/8 border backdrop-blur-md
+                  ${focused
+                    ? "border-white/30 shadow-[0_0_0_4px_rgba(255,255,255,0.06)]"
+                    : "border-white/12 shadow-none"
+                  }`}
     >
       <Search
-        size={17}
-        className={`ml-4 shrink-0 transition-colors duration-200 ${
-          focused ? "text-foreground" : "text-muted"
+        size={16}
+        className={`ml-5 shrink-0 transition-colors duration-200 ${
+          focused ? "text-white/70" : "text-white/30"
         }`}
       />
       <input
@@ -38,11 +40,13 @@ export default function HeroSearch() {
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder="Search by technique, mood, style…"
-        className="flex-1 px-3 py-3.5 text-sm bg-transparent outline-none placeholder:text-muted"
+        className="flex-1 px-4 py-4 text-[14px] bg-transparent outline-none
+                   text-white/90 placeholder:text-white/30"
       />
       <button
         type="submit"
-        className="m-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-80 active:scale-95 transition-all duration-150"
+        className="m-1.5 px-5 py-2.5 rounded-full bg-white text-black text-[13px] font-semibold
+                   hover:bg-white/90 active:scale-95 transition-all duration-150 shrink-0"
       >
         Search
       </button>

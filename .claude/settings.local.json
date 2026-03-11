@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-eslint --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-eslint --no-src-dir --import-alias \"@/*\" --yes --name frames)",
+      "Read(//d/Node/**)",
+      "Bash(npx create-next-app@latest frames-app --typescript --tailwind --app --no-eslint --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(cp -r d:/Node/frames-app/. d:/Node/Frames/)",
+      "Bash(rm -rf d:/Node/frames-app)",
+      "Bash(npm install:*)"
+    ]
+  }
+}

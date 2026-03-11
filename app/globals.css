@@ -453,3 +453,13 @@ h2 {
   background: var(--surface-2);
   color: var(--text);
 }
+
+.admin-modal-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.admin-modal-panel {
+  background: var(--surface);
+}

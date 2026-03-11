@@ -191,7 +191,7 @@ body {
 
 .masonry-grid {
   columns: 2;
-  column-gap: 12px;
+  column-gap: 8px;
   width: 100%;
 }
 
@@ -209,7 +209,7 @@ body {
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   display: block;
 }
 
@@ -445,6 +445,43 @@ body {
 
 .admin-section-label {
   color: var(--muted);
+}
+
+/* =============================================
+   ADMIN FORM INPUTS — blue focus ring
+   ============================================= */
+
+.admin-input {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+.admin-input::placeholder {
+  color: var(--muted);
+}
+
+.admin-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Auto-apply to all inputs inside admin pages */
+.admin-layout input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.admin-layout textarea,
+.admin-layout select {
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-layout input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+.admin-layout textarea:focus,
+.admin-layout select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
 }
 
 .admin-card {

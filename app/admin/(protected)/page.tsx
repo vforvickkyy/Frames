@@ -17,12 +17,12 @@ export default async function AdminOverviewPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {[
-          { label: "Total Frames", value: stats.totalFrames,                icon: Film,  href: "/admin/content"    },
-          { label: "Total Views",  value: stats.totalViews.toLocaleString(), icon: Eye,   href: null                },
-          { label: "Creators",     value: stats.totalCreators,               icon: Users, href: "/admin/creators"   },
-          { label: "Categories",   value: stats.totalCategories,             icon: Tag,   href: "/admin/categories" },
-        ].map(({ label, value, icon: Icon, href }) => (
-          <div key={label} className="admin-card p-5 flex flex-col gap-3">
+          { label: "Total Frames", value: stats.totalFrames,                icon: Film,  href: "/admin/content",    accent: "border-l-[3px] border-l-blue-500"    },
+          { label: "Total Views",  value: stats.totalViews.toLocaleString(), icon: Eye,   href: null,                accent: "border-l-[3px] border-l-violet-500"  },
+          { label: "Creators",     value: stats.totalCreators,               icon: Users, href: "/admin/creators",   accent: "border-l-[3px] border-l-emerald-500" },
+          { label: "Categories",   value: stats.totalCategories,             icon: Tag,   href: "/admin/categories", accent: "border-l-[3px] border-l-amber-500"   },
+        ].map(({ label, value, icon: Icon, href, accent }) => (
+          <div key={label} className={`admin-card p-5 flex flex-col gap-3 ${accent}`}>
             <div className="flex items-center justify-between">
               <p className="text-[11px] font-semibold text-muted uppercase tracking-wider">{label}</p>
               <span className="p-1.5 rounded-lg bg-surface-hover">

@@ -79,7 +79,7 @@ export default async function FramePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-muted mb-8">
           <Link href="/" className="hover:text-foreground transition-colors">
@@ -100,7 +100,7 @@ export default async function FramePage({ params }: Props) {
           <span className="text-foreground font-medium truncate">{frame.title}</span>
         </nav>
 
-        <div className="grid lg:grid-cols-[1fr_320px] gap-10">
+        <div className="grid lg:grid-cols-[65%_1fr] gap-12">
           {/* Main media */}
           <div>
             <div className="rounded-2xl overflow-hidden bg-surface border border-border">
@@ -124,7 +124,7 @@ export default async function FramePage({ params }: Props) {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-8">
+          <div className="space-y-8 lg:sticky lg:top-20 lg:self-start">
             {/* Title & description */}
             <div>
               <h1 className="text-2xl font-semibold tracking-tight mb-3">
@@ -198,7 +198,7 @@ export default async function FramePage({ params }: Props) {
                     <Link
                       key={tag}
                       href={`/search?tag=${encodeURIComponent(tag)}`}
-                      className="px-3 py-1 rounded-full text-xs bg-surface border border-border hover:bg-surface-hover transition-colors"
+                      className="px-3 py-1 rounded-full text-xs border border-border-strong hover:bg-surface transition-colors"
                     >
                       {tag}
                     </Link>

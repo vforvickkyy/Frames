@@ -20,7 +20,7 @@ export default function FrameCard({ frame, priority = false }: FrameCardProps) {
   return (
     <Link
       href={`/frame/${frame.slug}`}
-      className="masonry-item fade-in block group frame-card rounded-xl overflow-hidden bg-surface relative"
+      className="fade-in block group frame-card rounded-xl overflow-hidden bg-surface relative"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

@@ -12,11 +12,12 @@ export default function MasonryGrid({ frames, priority = false }: MasonryGridPro
   return (
     <div className="masonry-grid">
       {frames.map((frame, i) => (
-        <FrameCard
-          key={frame.id}
-          frame={frame}
-          priority={priority && i < 8}
-        />
+        <div key={frame.id} className="masonry-item">
+          <FrameCard
+            frame={frame}
+            priority={priority && i < 8}
+          />
+        </div>
       ))}
     </div>
   );

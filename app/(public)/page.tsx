@@ -7,6 +7,7 @@ import {
 } from "@/lib/queries";
 import InfiniteGrid from "@/components/frames/InfiniteGrid";
 import MasonryGrid from "@/components/frames/MasonryGrid";
+import FrameCard from "@/components/frames/FrameCard";
 import CategoryPills from "@/components/ui/CategoryPills";
 import EmptyState from "@/components/ui/EmptyState";
 import { FrameCardSkeleton } from "@/components/ui/Skeletons";
@@ -22,7 +23,7 @@ export default async function HomePage() {
     ]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-6">
 
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="pt-20 pb-16 text-center">
@@ -47,7 +48,11 @@ export default async function HomePage() {
       {trending.length > 0 && (
         <section className="mb-16 section-reveal">
           <SectionLabel title="Trending" subtitle="Most viewed" />
-          <MasonryGrid frames={trending} priority />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {trending.map((frame) => (
+              <FrameCard key={frame.id} frame={frame} priority />
+            ))}
+          </div>
         </section>
       )}
 
@@ -55,7 +60,11 @@ export default async function HomePage() {
       {recent.length > 0 && (
         <section className="mb-16 section-reveal">
           <SectionLabel title="Recently Added" />
-          <MasonryGrid frames={recent} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {recent.map((frame) => (
+              <FrameCard key={frame.id} frame={frame} />
+            ))}
+          </div>
         </section>
       )}
 

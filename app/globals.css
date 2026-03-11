@@ -59,18 +59,26 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-none {
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 /* Selection */
@@ -79,65 +87,148 @@ body {
   color: var(--background);
 }
 
-/* Transitions */
+/* Base transitions */
 a,
 button {
-  transition: all 0.15s ease;
+  transition: color 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
 }
 
-/* Masonry layout */
+/* =============================================
+   KEYFRAMES
+   ============================================= */
+
+@keyframes shimmer {
+  0%   { transform: translate3d(-100%, 0, 0); }
+  100% { transform: translate3d(200%, 0, 0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes fadeInFast {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translate3d(0, -8px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* =============================================
+   ANIMATION UTILITIES
+   ============================================= */
+
+.fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.fade-in-fast {
+  animation: fadeInFast 0.2s ease both;
+}
+
+.slide-down {
+  animation: slideDown 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.scale-in {
+  animation: scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Staggered entrance — set --card-index on each child */
+.stagger-child {
+  animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: calc(var(--card-index, 0) * 40ms);
+}
+
+/* =============================================
+   MASONRY LAYOUT
+   ============================================= */
+
 .masonry-grid {
   columns: 2;
-  column-gap: 12px;
+  column-gap: 10px;
 }
 
 @media (min-width: 640px) {
   .masonry-grid {
     columns: 3;
+    column-gap: 12px;
   }
 }
 
 @media (min-width: 1024px) {
   .masonry-grid {
     columns: 4;
+    column-gap: 14px;
   }
 }
 
 @media (min-width: 1280px) {
   .masonry-grid {
     columns: 5;
+    column-gap: 14px;
   }
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-/* Frosted glass */
+@media (min-width: 640px) {
+  .masonry-item {
+    margin-bottom: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-item {
+    margin-bottom: 14px;
+  }
+}
+
+/* =============================================
+   GLASS
+   ============================================= */
+
 .glass {
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  backdrop-filter: blur(12px) saturate(180%);
-  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  background: rgba(250, 250, 250, 0.75);
 }
 
 @media (prefers-color-scheme: dark) {
   .glass {
-    background: rgba(10, 10, 10, 0.7);
+    background: rgba(10, 10, 10, 0.8);
   }
 }
 
-/* Skeleton shimmer — uses translate3d to stay on compositor */
-@keyframes shimmer {
-  0% { transform: translate3d(-100%, 0, 0); }
-  100% { transform: translate3d(100%, 0, 0); }
-}
+/* =============================================
+   SKELETON SHIMMER
+   ============================================= */
 
 .skeleton {
   position: relative;
   overflow: hidden;
-  background: var(--surface);
-  border-radius: 8px;
+  background: var(--surface-hover);
+  border-radius: 10px;
 }
 
 .skeleton::after {
@@ -145,29 +236,89 @@ button {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--surface-hover) 50%,
-    transparent 100%
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 70%
   );
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.8s ease-in-out infinite;
 }
 
-/* Fade in animation — opacity + translate are compositor-only */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translate3d(0, 8px, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+@media (prefers-color-scheme: dark) {
+  .skeleton::after {
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 70%
+    );
+  }
 }
 
-.fade-in {
-  animation: fadeIn 0.3s ease forwards;
-}
+/* =============================================
+   FRAME CARD
+   ============================================= */
 
-/* Card hover */
 .frame-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+  will-change: transform;
 }
 
 .frame-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .frame-card:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* =============================================
+   CATEGORY PILL
+   ============================================= */
+
+.category-pill {
+  transition: background-color 0.2s ease, color 0.2s ease,
+              border-color 0.2s ease, transform 0.15s ease;
+}
+
+.category-pill:hover {
+  transform: translateY(-1px);
+}
+
+.category-pill.active {
+  transform: none;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+
+.header-scrolled {
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-scrolled {
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* =============================================
+   PAGE TRANSITIONS
+   ============================================= */
+
+.page-enter {
+  animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* =============================================
+   SECTION HEADER
+   ============================================= */
+
+.section-reveal {
+  animation: slideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }

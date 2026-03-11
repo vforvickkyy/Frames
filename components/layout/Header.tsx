@@ -17,11 +17,25 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (searchOpen) inputRef.current?.focus();
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (searchOpen) {
+      const id = setTimeout(() => inputRef.current?.focus(), 30);
+      return () => clearTimeout(id);
+    }
   }, [searchOpen]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -32,31 +46,37 @@ export default function Header() {
     }
   }
 
+  function closeSearch() {
+    setSearchOpen(false);
+    setQuery("");
+  }
+
   return (
     <header
-      className="sticky top-0 z-50 glass border-b"
-      style={{ borderColor: "var(--border)" }}
+      className={`sticky top-0 z-50 glass border-b border-border transition-shadow duration-300 ${
+        scrolled ? "header-scrolled" : ""
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-semibold tracking-tight hover:opacity-70"
+            className="text-lg font-semibold tracking-tight hover:opacity-60 transition-opacity duration-200"
           >
             Frames
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm transition-colors ${
+                className={`px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 ${
                   pathname === link.href
-                    ? "font-medium"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                    ? "font-medium text-foreground"
+                    : "text-muted hover:text-foreground hover:bg-surface-hover"
                 }`}
               >
                 {link.label}
@@ -65,60 +85,74 @@ export default function Header() {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
-            {/* Search toggle */}
-            {searchOpen ? (
-              <form onSubmit={handleSearch} className="flex items-center gap-2">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search frames…"
-                  className="w-48 sm:w-64 px-3 py-1.5 text-sm rounded-lg border outline-none focus:ring-1 focus:ring-[var(--foreground)] bg-[var(--surface)] border-[var(--border)]"
-                />
+          <div className="flex items-center gap-1">
+            {/* Search — inline expand */}
+            <div className="flex items-center">
+              {searchOpen ? (
+                <form
+                  onSubmit={handleSearch}
+                  className="flex items-center gap-1.5 fade-in-fast"
+                >
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Escape" && closeSearch()}
+                    placeholder="Search frames…"
+                    className="w-44 sm:w-60 px-3 py-1.5 text-sm rounded-lg border border-border outline-none
+                               focus:ring-2 focus:ring-foreground/20 focus:border-foreground/40
+                               bg-surface text-foreground transition-all duration-200
+                               placeholder:text-muted"
+                  />
+                  <button
+                    type="button"
+                    onClick={closeSearch}
+                    className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
+                    aria-label="Close search"
+                  >
+                    <X size={15} />
+                  </button>
+                </form>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => setSearchOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--muted)]"
-                  aria-label="Close search"
+                  onClick={() => setSearchOpen(true)}
+                  className="p-2 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
+                  aria-label="Open search"
                 >
-                  <X size={16} />
+                  <Search size={17} />
                 </button>
-              </form>
-            ) : (
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--muted)] hover:text-[var(--foreground)]"
-                aria-label="Open search"
-              >
-                <Search size={18} />
-              </button>
-            )}
+              )}
+            </div>
 
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--muted)]"
+              type="button"
+              className="md:hidden p-2 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+              <span
+                className={`block transition-transform duration-200 ${mobileOpen ? "rotate-90" : "rotate-0"}`}
+              >
+                {mobileOpen ? <X size={17} /> : <Menu size={17} />}
+              </span>
             </button>
           </div>
         </div>
 
-        {/* Mobile nav */}
+        {/* Mobile nav — slides down */}
         {mobileOpen && (
-          <nav className="md:hidden py-3 border-t border-[var(--border)] flex flex-col gap-1">
+          <nav className="md:hidden py-2 pb-3 border-t border-border flex flex-col gap-0.5 slide-down">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className={`px-2 py-2 text-sm rounded-lg ${
+                className={`px-3 py-2.5 text-sm rounded-xl transition-colors duration-150 ${
                   pathname === link.href
-                    ? "font-medium bg-[var(--surface-hover)]"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-hover)]"
+                    ? "font-medium bg-surface-hover text-foreground"
+                    : "text-muted hover:text-foreground hover:bg-surface-hover"
                 }`}
               >
                 {link.label}

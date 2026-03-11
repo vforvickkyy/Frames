@@ -22,7 +22,7 @@ export default async function HomePage() {
     ]);
 
   return (
-    <div className="max-w-7xl mx-auto px-6">
+    <div className="max-w-6xl mx-auto px-6 w-full">
 
       {/* ── Hero ─────────────────────────────────────── */}
       <section className="pt-24 pb-20 max-w-4xl mx-auto text-center">

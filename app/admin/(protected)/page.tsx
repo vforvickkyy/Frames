@@ -1,97 +1,85 @@
 import { getAdminStats } from "@/lib/queries";
 import Link from "next/link";
-import { Film, Users, Tag, Eye, TrendingUp, Upload } from "lucide-react";
+import { Film, Users, Tag, Eye, TrendingUp, Upload, ArrowRight } from "lucide-react";
 
 export default async function AdminOverviewPage() {
   const stats = await getAdminStats();
 
   return (
-    <div>
+    <div className="fade-in">
+
+      {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
-        <p className="text-sm text-[var(--muted)] mt-1">
-          Your Frames platform at a glance.
-        </p>
+        <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Overview</h1>
+        <p className="text-[13px] text-muted mt-1">Your Frames platform at a glance.</p>
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {[
-          {
-            label: "Total Frames",
-            value: stats.totalFrames,
-            icon: Film,
-            href: "/admin/content",
-          },
-          {
-            label: "Total Views",
-            value: stats.totalViews.toLocaleString(),
-            icon: Eye,
-          },
-          {
-            label: "Creators",
-            value: stats.totalCreators,
-            icon: Users,
-            href: "/admin/creators",
-          },
-          {
-            label: "Categories",
-            value: stats.totalCategories,
-            icon: Tag,
-            href: "/admin/categories",
-          },
+          { label: "Total Frames", value: stats.totalFrames,                icon: Film,  href: "/admin/content"    },
+          { label: "Total Views",  value: stats.totalViews.toLocaleString(), icon: Eye,   href: null                },
+          { label: "Creators",     value: stats.totalCreators,               icon: Users, href: "/admin/creators"   },
+          { label: "Categories",   value: stats.totalCategories,             icon: Tag,   href: "/admin/categories" },
         ].map(({ label, value, icon: Icon, href }) => (
-          <div
-            key={label}
-            className="p-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)]"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-medium text-[var(--muted)]">{label}</p>
-              <Icon size={16} className="text-[var(--muted)]" />
+          <div key={label} className="admin-card p-5 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] font-semibold text-muted uppercase tracking-wider">{label}</p>
+              <span className="p-1.5 rounded-lg bg-surface-hover">
+                <Icon size={13} className="text-muted" />
+              </span>
             </div>
-            <p className="text-2xl font-semibold">{value}</p>
+            <p className="text-[28px] font-semibold tracking-tight leading-none">{value}</p>
             {href && (
               <Link
                 href={href}
-                className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] mt-2 inline-block transition-colors"
+                className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-foreground transition-colors group"
               >
-                View all →
+                View all
+                <ArrowRight size={10} className="transition-transform duration-150 group-hover:translate-x-0.5" />
               </Link>
             )}
           </div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-4">
+
         {/* Top performing frames */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={16} className="text-[var(--muted)]" />
-            <h2 className="text-sm font-semibold">Top Performing Frames</h2>
+        <div className="admin-card p-5">
+          <div className="flex items-center gap-2 mb-5">
+            <TrendingUp size={14} className="text-muted" />
+            <h2 className="text-[13px] font-semibold">Top Performing Frames</h2>
           </div>
           {stats.topFrames.length === 0 ? (
-            <p className="text-sm text-[var(--muted)]">No frames yet.</p>
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <Film size={22} className="text-muted/40 mb-2" />
+              <p className="text-[13px] text-muted">No frames yet.</p>
+            </div>
           ) : (
-            <div className="space-y-3">
-              {stats.topFrames.map((frame) => (
+            <div className="space-y-0.5">
+              {stats.topFrames.map((frame, i) => (
                 <div
                   key={frame.id}
-                  className="flex items-center justify-between gap-4"
+                  className="flex items-center justify-between gap-4 px-3 py-2.5 rounded-lg hover:bg-surface-hover transition-colors group"
                 >
-                  <div className="min-w-0">
-                    <Link
-                      href={`/frame/${frame.slug}`}
-                      className="text-sm font-medium hover:underline truncate block"
-                    >
-                      {frame.title}
-                    </Link>
-                    <p className="text-xs text-[var(--muted)]">
-                      {frame.view_count?.toLocaleString()} views
-                    </p>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-[11px] text-muted w-4 shrink-0 text-center tabular-nums">{i + 1}</span>
+                    <div className="min-w-0">
+                      <Link
+                        href={`/frame/${frame.slug}`}
+                        className="text-[13px] font-medium hover:underline truncate block"
+                      >
+                        {frame.title}
+                      </Link>
+                      <p className="text-[11px] text-muted">
+                        {(frame.view_count ?? 0).toLocaleString()} views
+                      </p>
+                    </div>
                   </div>
                   <Link
                     href={`/admin/content?edit=${frame.id}`}
-                    className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] flex-shrink-0 transition-colors"
+                    className="text-[11px] text-muted hover:text-foreground opacity-0 group-hover:opacity-100 transition-all shrink-0"
                   >
                     Edit
                   </Link>
@@ -102,26 +90,31 @@ export default async function AdminOverviewPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-          <h2 className="text-sm font-semibold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-3">
+        <div className="admin-card p-5">
+          <h2 className="text-[13px] font-semibold mb-5">Quick Actions</h2>
+          <div className="grid grid-cols-2 gap-2">
             {[
-              { href: "/admin/upload", label: "Upload Frame", icon: Upload },
-              { href: "/admin/content", label: "Manage Content", icon: Film },
-              { href: "/admin/creators", label: "Add Creator", icon: Users },
-              { href: "/admin/categories", label: "Edit Categories", icon: Tag },
-            ].map(({ href, label, icon: Icon }) => (
+              { href: "/admin/upload",     label: "Upload Frame",    icon: Upload, primary: true },
+              { href: "/admin/content",    label: "Manage Content",  icon: Film   },
+              { href: "/admin/creators",   label: "Add Creator",     icon: Users  },
+              { href: "/admin/categories", label: "Edit Categories", icon: Tag    },
+            ].map(({ href, label, icon: Icon, primary }) => (
               <Link
                 key={href}
                 href={href}
-                className="flex items-center gap-2.5 p-3 rounded-xl border border-[var(--border)] hover:bg-[var(--surface-hover)] transition-colors text-sm"
+                className={`flex items-center gap-2.5 p-3.5 rounded-xl text-[13px] font-medium transition-all duration-150 ${
+                  primary
+                    ? "bg-foreground text-background hover:opacity-80"
+                    : "border border-border hover:bg-surface-hover"
+                }`}
               >
-                <Icon size={16} className="text-[var(--muted)]" />
+                <Icon size={14} className={primary ? "opacity-70" : "text-muted"} />
                 {label}
               </Link>
             ))}
           </div>
         </div>
+
       </div>
     </div>
   );

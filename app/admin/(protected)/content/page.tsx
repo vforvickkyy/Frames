@@ -12,7 +12,7 @@ export default async function ManageContentPage() {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight">Manage Content</h1>
-        <p className="text-sm text-[var(--muted)] mt-1">
+        <p className="text-sm text-muted mt-1">
           Edit, delete, hide, or re-rank your frames.
         </p>
       </div>

@@ -81,8 +81,8 @@ export default async function FramePage({ params }: Props) {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-[var(--muted)] mb-8">
-          <Link href="/" className="hover:text-[var(--foreground)] transition-colors">
+        <nav className="flex items-center gap-2 text-sm text-muted mb-8">
+          <Link href="/" className="hover:text-foreground transition-colors">
             Frames
           </Link>
           {frame.category && (
@@ -90,20 +90,20 @@ export default async function FramePage({ params }: Props) {
               <span>/</span>
               <Link
                 href={`/category/${frame.category.slug}`}
-                className="hover:text-[var(--foreground)] transition-colors"
+                className="hover:text-foreground transition-colors"
               >
                 {frame.category.name}
               </Link>
             </>
           )}
           <span>/</span>
-          <span className="text-[var(--foreground)] font-medium truncate">{frame.title}</span>
+          <span className="text-foreground font-medium truncate">{frame.title}</span>
         </nav>
 
         <div className="grid lg:grid-cols-[1fr_320px] gap-10">
           {/* Main media */}
           <div>
-            <div className="rounded-2xl overflow-hidden bg-[var(--surface)] border border-[var(--border)]">
+            <div className="rounded-2xl overflow-hidden bg-surface border border-border">
               {frame.file_url && (
                 <Image
                   src={frame.file_url}
@@ -118,7 +118,7 @@ export default async function FramePage({ params }: Props) {
             </div>
 
             {/* View count */}
-            <p className="text-xs text-[var(--muted)] mt-3">
+            <p className="text-xs text-muted mt-3">
               {frame.view_count.toLocaleString()} views
             </p>
           </div>
@@ -131,7 +131,7 @@ export default async function FramePage({ params }: Props) {
                 {frame.title}
               </h1>
               {frame.description && (
-                <p className="text-sm text-[var(--muted)] leading-relaxed">
+                <p className="text-sm text-muted leading-relaxed">
                   {frame.description}
                 </p>
               )}
@@ -140,7 +140,7 @@ export default async function FramePage({ params }: Props) {
             {/* Creator */}
             {frame.creator && (
               <div>
-                <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
+                <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">
                   Creator
                 </p>
                 <Link
@@ -156,7 +156,7 @@ export default async function FramePage({ params }: Props) {
                       className="rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-[var(--surface-hover)] flex items-center justify-center text-sm font-semibold">
+                    <div className="w-10 h-10 rounded-full bg-surface-hover flex items-center justify-center text-sm font-semibold">
                       {frame.creator.display_name[0]}
                     </div>
                   )}
@@ -164,7 +164,7 @@ export default async function FramePage({ params }: Props) {
                     <p className="text-sm font-medium group-hover:underline">
                       {frame.creator.display_name}
                     </p>
-                    <p className="text-xs text-[var(--muted)]">
+                    <p className="text-xs text-muted">
                       @{frame.creator.username}
                     </p>
                   </div>
@@ -175,12 +175,12 @@ export default async function FramePage({ params }: Props) {
             {/* Category */}
             {frame.category && (
               <div>
-                <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
+                <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">
                   Category
                 </p>
                 <Link
                   href={`/category/${frame.category.slug}`}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-sm border border-[var(--border)] hover:bg-[var(--surface-hover)] transition-colors"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-sm border border-border hover:bg-surface-hover transition-colors"
                 >
                   {frame.category.name}
                 </Link>
@@ -190,7 +190,7 @@ export default async function FramePage({ params }: Props) {
             {/* Tags */}
             {frame.tags && frame.tags.length > 0 && (
               <div>
-                <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
+                <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">
                   Tags
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -198,7 +198,7 @@ export default async function FramePage({ params }: Props) {
                     <Link
                       key={tag}
                       href={`/search?tag=${encodeURIComponent(tag)}`}
-                      className="px-3 py-1 rounded-full text-xs bg-[var(--surface)] border border-[var(--border)] hover:bg-[var(--surface-hover)] transition-colors"
+                      className="px-3 py-1 rounded-full text-xs bg-surface border border-border hover:bg-surface-hover transition-colors"
                     >
                       {tag}
                     </Link>
@@ -210,10 +210,10 @@ export default async function FramePage({ params }: Props) {
             {/* Technique notes */}
             {frame.technique_notes && (
               <div>
-                <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-3">
+                <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">
                   Technique
                 </p>
-                <p className="text-sm text-[var(--muted)] leading-relaxed">
+                <p className="text-sm text-muted leading-relaxed">
                   {frame.technique_notes}
                 </p>
               </div>
@@ -225,7 +225,7 @@ export default async function FramePage({ params }: Props) {
                 href={frame.file_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors"
               >
                 <ExternalLink size={14} />
                 View original

@@ -82,7 +82,7 @@ export default async function SearchPage({ searchParams }: Props) {
           {q ? `Results for "${q}"` : "Search"}
         </h1>
         {!q && (
-          <p className="text-[var(--muted)] text-sm">
+          <p className="text-muted text-sm">
             Find visual references by technique, mood, or category.
           </p>
         )}

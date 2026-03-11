@@ -80,7 +80,7 @@ export default function CreatorsManager({
       <div className="flex justify-end">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-sm font-medium hover:opacity-80 transition-opacity"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-80 transition-opacity"
         >
           {showForm ? <X size={14} /> : <Plus size={14} />}
           {showForm ? "Cancel" : "Add Creator"}
@@ -91,7 +91,7 @@ export default function CreatorsManager({
       {showForm && (
         <form
           onSubmit={handleAdd}
-          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4"
+          className="rounded-2xl border border-border bg-surface p-6 space-y-4"
         >
           <h2 className="text-base font-semibold">New Creator</h2>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -102,7 +102,7 @@ export default function CreatorsManager({
               { field: "instagram" as const, label: "Instagram", placeholder: "@handle" },
             ].map(({ field, label, placeholder }) => (
               <div key={field}>
-                <label className="block text-xs font-medium text-[var(--muted)] mb-1">
+                <label className="block text-xs font-medium text-muted mb-1">
                   {label}
                 </label>
                 <input
@@ -112,12 +112,12 @@ export default function CreatorsManager({
                     setForm((p) => ({ ...p, [field]: e.target.value }))
                   }
                   placeholder={placeholder}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-[var(--border)] bg-[var(--background)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-border bg-background outline-none focus:ring-2 focus:ring-foreground"
                 />
               </div>
             ))}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-medium text-[var(--muted)] mb-1">
+              <label className="block text-xs font-medium text-muted mb-1">
                 Bio
               </label>
               <textarea
@@ -125,7 +125,7 @@ export default function CreatorsManager({
                 onChange={(e) => setForm((p) => ({ ...p, bio: e.target.value }))}
                 rows={2}
                 placeholder="Short bio…"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-[var(--border)] bg-[var(--background)] outline-none focus:ring-2 focus:ring-[var(--foreground)] resize-none"
+                className="w-full px-3 py-2 text-sm rounded-xl border border-border bg-background outline-none focus:ring-2 focus:ring-foreground resize-none"
               />
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function CreatorsManager({
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+            className="px-4 py-2 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
           >
             {loading ? "Saving…" : "Save Creator"}
           </button>
@@ -141,25 +141,25 @@ export default function CreatorsManager({
       )}
 
       {/* Creators list */}
-      <div className="rounded-2xl border border-[var(--border)] overflow-hidden">
+      <div className="rounded-2xl border border-border overflow-hidden">
         {creators.length === 0 ? (
-          <p className="text-sm text-[var(--muted)] p-6 text-center">
+          <p className="text-sm text-muted p-6 text-center">
             No creators yet.
           </p>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[var(--border)] bg-[var(--surface)]">
-                <th className="px-4 py-3 text-left font-medium text-[var(--muted)]">Creator</th>
-                <th className="px-4 py-3 text-left font-medium text-[var(--muted)] hidden sm:table-cell">Contact</th>
-                <th className="px-4 py-3 text-right font-medium text-[var(--muted)]">Actions</th>
+              <tr className="border-b border-border bg-surface">
+                <th className="px-4 py-3 text-left font-medium text-muted">Creator</th>
+                <th className="px-4 py-3 text-left font-medium text-muted hidden sm:table-cell">Contact</th>
+                <th className="px-4 py-3 text-right font-medium text-muted">Actions</th>
               </tr>
             </thead>
             <tbody>
               {creators.map((creator) => (
                 <tr
                   key={creator.id}
-                  className="border-b border-[var(--border)] last:border-0 hover:bg-[var(--surface-hover)] transition-colors"
+                  className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors"
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -169,27 +169,27 @@ export default function CreatorsManager({
                           alt={creator.display_name}
                           width={32}
                           height={32}
-                          className="rounded-full object-cover flex-shrink-0"
+                          className="rounded-full object-cover shrink-0"
                         />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-[var(--surface-hover)] flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-surface-hover flex items-center justify-center text-xs font-semibold shrink-0">
                           {creator.display_name[0]}
                         </div>
                       )}
                       <div>
                         <p className="font-medium">{creator.display_name}</p>
-                        <p className="text-xs text-[var(--muted)]">@{creator.username}</p>
+                        <p className="text-xs text-muted">@{creator.username}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 hidden sm:table-cell text-[var(--muted)] text-xs">
+                  <td className="px-4 py-3 hidden sm:table-cell text-muted text-xs">
                     {creator.instagram && <p>{creator.instagram}</p>}
                     {creator.website && (
                       <a
                         href={creator.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-[var(--foreground)] underline"
+                        className="hover:text-foreground underline"
                       >
                         Website
                       </a>
@@ -200,13 +200,13 @@ export default function CreatorsManager({
                       <Link
                         href={`/creator/${creator.username}`}
                         target="_blank"
-                        className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
                       >
                         <ExternalLink size={14} />
                       </Link>
                       <button
                         onClick={() => handleDelete(creator.id)}
-                        className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-[var(--muted)] hover:text-red-500 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-muted hover:text-red-500 transition-colors"
                       >
                         <Trash2 size={14} />
                       </button>

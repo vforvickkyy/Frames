@@ -7,7 +7,9 @@
       "Bash(npx create-next-app@latest frames-app --typescript --tailwind --app --no-eslint --no-src-dir --import-alias \"@/*\" --yes)",
       "Bash(cp -r d:/Node/frames-app/. d:/Node/Frames/)",
       "Bash(rm -rf d:/Node/frames-app)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(powershell.exe -Command \":*)",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"d:/Node/Frames/fix-classes.ps1\")"
     ]
   }
 }

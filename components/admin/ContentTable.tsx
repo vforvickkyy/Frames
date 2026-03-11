@@ -47,7 +47,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
 
   if (frames.length === 0) {
     return (
-      <p className="text-sm text-[var(--muted)] py-8 text-center">
+      <p className="text-sm text-muted py-8 text-center">
         No frames yet.{" "}
         <Link href="/admin/upload" className="underline">
           Upload one
@@ -58,28 +58,28 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-[var(--border)]">
+    <div className="overflow-x-auto rounded-2xl border border-border">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-[var(--border)] bg-[var(--surface)]">
-            <th className="px-4 py-3 text-left font-medium text-[var(--muted)] w-16" />
-            <th className="px-4 py-3 text-left font-medium text-[var(--muted)]">Title</th>
-            <th className="px-4 py-3 text-left font-medium text-[var(--muted)] hidden sm:table-cell">
+          <tr className="border-b border-border bg-surface">
+            <th className="px-4 py-3 text-left font-medium text-muted w-16" />
+            <th className="px-4 py-3 text-left font-medium text-muted">Title</th>
+            <th className="px-4 py-3 text-left font-medium text-muted hidden sm:table-cell">
               Category
             </th>
-            <th className="px-4 py-3 text-left font-medium text-[var(--muted)] hidden md:table-cell">
+            <th className="px-4 py-3 text-left font-medium text-muted hidden md:table-cell">
               Creator
             </th>
-            <th className="px-4 py-3 text-right font-medium text-[var(--muted)] hidden lg:table-cell">
+            <th className="px-4 py-3 text-right font-medium text-muted hidden lg:table-cell">
               Rank
             </th>
-            <th className="px-4 py-3 text-right font-medium text-[var(--muted)] hidden lg:table-cell">
+            <th className="px-4 py-3 text-right font-medium text-muted hidden lg:table-cell">
               Views
             </th>
-            <th className="px-4 py-3 text-center font-medium text-[var(--muted)]">
+            <th className="px-4 py-3 text-center font-medium text-muted">
               Status
             </th>
-            <th className="px-4 py-3 text-right font-medium text-[var(--muted)]">
+            <th className="px-4 py-3 text-right font-medium text-muted">
               Actions
             </th>
           </tr>
@@ -88,13 +88,13 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
           {frames.map((frame) => (
             <tr
               key={frame.id}
-              className={`border-b border-[var(--border)] last:border-0 transition-colors hover:bg-[var(--surface-hover)] ${
+              className={`border-b border-border last:border-0 transition-colors hover:bg-surface-hover ${
                 frame.is_hidden ? "opacity-50" : ""
               }`}
             >
               {/* Thumbnail */}
               <td className="px-4 py-3">
-                <div className="w-12 h-10 rounded-lg overflow-hidden bg-[var(--surface-hover)] flex-shrink-0">
+                <div className="w-12 h-10 rounded-lg overflow-hidden bg-surface-hover shrink-0">
                   {(frame.thumbnail_url || frame.file_url) && (
                     <Image
                       src={frame.thumbnail_url || frame.file_url}
@@ -110,29 +110,29 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
 
               {/* Title */}
               <td className="px-4 py-3">
-                <p className="font-medium truncate max-w-[180px]">{frame.title}</p>
-                <p className="text-xs text-[var(--muted)] font-mono truncate">
+                <p className="font-medium truncate max-w-45">{frame.title}</p>
+                <p className="text-xs text-muted font-mono truncate">
                   {frame.slug}
                 </p>
               </td>
 
               {/* Category */}
-              <td className="px-4 py-3 hidden sm:table-cell text-[var(--muted)]">
+              <td className="px-4 py-3 hidden sm:table-cell text-muted">
                 {frame.category?.name || "—"}
               </td>
 
               {/* Creator */}
-              <td className="px-4 py-3 hidden md:table-cell text-[var(--muted)]">
+              <td className="px-4 py-3 hidden md:table-cell text-muted">
                 {frame.creator?.display_name || "—"}
               </td>
 
               {/* Rank */}
-              <td className="px-4 py-3 text-right hidden lg:table-cell text-[var(--muted)]">
+              <td className="px-4 py-3 text-right hidden lg:table-cell text-muted">
                 {frame.rank}
               </td>
 
               {/* Views */}
-              <td className="px-4 py-3 text-right hidden lg:table-cell text-[var(--muted)]">
+              <td className="px-4 py-3 text-right hidden lg:table-cell text-muted">
                 {frame.view_count?.toLocaleString()}
               </td>
 
@@ -141,7 +141,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                 <span
                   className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
                     frame.is_hidden
-                      ? "bg-[var(--surface-hover)] text-[var(--muted)]"
+                      ? "bg-surface-hover text-muted"
                       : "bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400"
                   }`}
                 >
@@ -155,7 +155,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                   <Link
                     href={`/frame/${frame.slug}`}
                     target="_blank"
-                    className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
                     title="View"
                   >
                     <ExternalLink size={14} />
@@ -163,7 +163,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                   <button
                     onClick={() => toggleHidden(frame)}
                     disabled={loading === frame.id}
-                    className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
                     title={frame.is_hidden ? "Show" : "Hide"}
                   >
                     {frame.is_hidden ? <Eye size={14} /> : <EyeOff size={14} />}
@@ -171,7 +171,7 @@ export default function ContentTable({ frames: initialFrames }: ContentTableProp
                   <button
                     onClick={() => deleteFrame(frame)}
                     disabled={loading === frame.id}
-                    className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-[var(--muted)] hover:text-red-500 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-muted hover:text-red-500 transition-colors"
                     title="Delete"
                   >
                     <Trash2 size={14} />

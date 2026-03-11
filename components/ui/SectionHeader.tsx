@@ -5,10 +5,10 @@ interface SectionHeaderProps {
 
 export default function SectionHeader({ title, subtitle }: SectionHeaderProps) {
   return (
-    <div className="mb-6">
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+    <div className="flex items-baseline gap-3 mb-6">
+      <h2 className="text-[17px] font-semibold tracking-tight">{title}</h2>
       {subtitle && (
-        <p className="text-sm text-[var(--muted)] mt-1">{subtitle}</p>
+        <span className="text-[13px] text-muted">{subtitle}</span>
       )}
     </div>
   );

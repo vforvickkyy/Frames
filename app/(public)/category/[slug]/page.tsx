@@ -50,7 +50,7 @@ export default async function CategoryPage({ params }: Props) {
           {category.name}
         </h1>
         {category.description && (
-          <p className="text-[var(--muted)] max-w-xl">{category.description}</p>
+          <p className="text-muted max-w-xl">{category.description}</p>
         )}
       </div>
 

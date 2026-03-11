@@ -52,7 +52,7 @@ export default function TagsManager({ tags: initial }: { tags: Tag[] }) {
   }
 
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+    <div className="rounded-2xl border border-border bg-surface p-6">
       <h2 className="text-base font-semibold mb-4">Tags</h2>
 
       <form onSubmit={handleAdd} className="flex gap-2 mb-5">
@@ -62,12 +62,12 @@ export default function TagsManager({ tags: initial }: { tags: Tag[] }) {
           onChange={(e) => setName(e.target.value)}
           placeholder="Tag name"
           required
-          className="flex-1 px-3 py-2 text-sm rounded-xl border border-[var(--border)] bg-[var(--background)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+          className="flex-1 px-3 py-2 text-sm rounded-xl border border-border bg-background outline-none focus:ring-2 focus:ring-foreground"
         />
         <button
           type="submit"
           disabled={loading}
-          className="p-2 rounded-xl bg-[var(--foreground)] text-[var(--background)] hover:opacity-80 transition-opacity disabled:opacity-50"
+          className="p-2 rounded-xl bg-foreground text-background hover:opacity-80 transition-opacity disabled:opacity-50"
         >
           <Plus size={16} />
         </button>
@@ -78,12 +78,12 @@ export default function TagsManager({ tags: initial }: { tags: Tag[] }) {
         {tags.map((tag) => (
           <div
             key={tag.id}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[var(--border)] text-sm"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-border text-sm"
           >
             {tag.name}
             <button
               onClick={() => handleDelete(tag.id)}
-              className="text-[var(--muted)] hover:text-red-500 transition-colors"
+              className="text-muted hover:text-red-500 transition-colors"
             >
               <Trash2 size={12} />
             </button>

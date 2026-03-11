@@ -35,7 +35,7 @@ export default function SearchFilters({
     <div className="space-y-4">
       {/* Category pills */}
       <div>
-        <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-2">
+        <p className="text-xs font-medium text-muted uppercase tracking-wider mb-2">
           Category
         </p>
         <div className="flex flex-wrap gap-2">
@@ -43,8 +43,8 @@ export default function SearchFilters({
             onClick={() => updateFilter("category", null)}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               !activeCategory
-                ? "bg-[var(--foreground)] text-[var(--background)]"
-                : "border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                ? "bg-foreground text-background"
+                : "border border-border text-muted hover:text-foreground"
             }`}
           >
             All
@@ -60,8 +60,8 @@ export default function SearchFilters({
               }
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 activeCategory === cat.slug
-                  ? "bg-[var(--foreground)] text-[var(--background)]"
-                  : "border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                  ? "bg-foreground text-background"
+                  : "border border-border text-muted hover:text-foreground"
               }`}
             >
               {cat.name}
@@ -73,7 +73,7 @@ export default function SearchFilters({
       {/* Tag pills */}
       {tags.length > 0 && (
         <div>
-          <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider mb-2">
+          <p className="text-xs font-medium text-muted uppercase tracking-wider mb-2">
             Tags
           </p>
           <div className="flex flex-wrap gap-2">
@@ -85,8 +85,8 @@ export default function SearchFilters({
                 }
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   activeTag === tag.slug
-                    ? "bg-[var(--foreground)] text-[var(--background)]"
-                    : "border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                    ? "bg-foreground text-background"
+                    : "border border-border text-muted hover:text-foreground"
                 }`}
               >
                 {tag.name}

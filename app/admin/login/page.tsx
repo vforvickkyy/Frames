@@ -47,17 +47,20 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--background)]">
-      <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight mb-1">Admin</h1>
-          <p className="text-sm text-[var(--muted)]">Sign in to manage Frames</p>
+    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
+      <div className="w-full max-w-90 scale-in">
+
+        {/* Logo */}
+        <div className="mb-10 text-center">
+          <p className="text-[13px] font-semibold tracking-tight text-muted mb-6">Frames</p>
+          <h1 className="text-[22px] font-semibold tracking-tight mb-1.5">Welcome back</h1>
+          <p className="text-[13px] text-muted">Sign in to your admin account</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-3">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1.5">
-              Email
+            <label htmlFor="email" className="block text-[12px] font-medium mb-1.5 text-muted">
+              Email address
             </label>
             <input
               id="email"
@@ -65,13 +68,16 @@ export default function AdminLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
               placeholder="admin@example.com"
-              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)] focus:ring-offset-1 transition-shadow"
+              className="w-full px-3.5 py-2.5 text-[14px] rounded-xl border border-border bg-surface outline-none
+                         focus:ring-2 focus:ring-foreground/15 focus:border-foreground/30
+                         transition-all duration-200 placeholder:text-muted"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1.5">
+            <label htmlFor="password" className="block text-[12px] font-medium mb-1.5 text-muted">
               Password
             </label>
             <input
@@ -80,13 +86,16 @@ export default function AdminLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
               placeholder="••••••••"
-              className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)] focus:ring-offset-1 transition-shadow"
+              className="w-full px-3.5 py-2.5 text-[14px] rounded-xl border border-border bg-surface outline-none
+                         focus:ring-2 focus:ring-foreground/15 focus:border-foreground/30
+                         transition-all duration-200 placeholder:text-muted"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-500 bg-red-50 dark:bg-red-950/30 px-3 py-2 rounded-lg">
+            <p className="text-[13px] text-red-500 bg-red-500/8 px-3.5 py-2.5 rounded-xl border border-red-500/15 fade-in">
               {error}
             </p>
           )}
@@ -94,7 +103,8 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+            className="w-full mt-1 py-2.5 rounded-xl bg-foreground text-background text-[14px] font-medium
+                       hover:opacity-80 active:scale-[0.98] transition-all duration-150 disabled:opacity-40"
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>

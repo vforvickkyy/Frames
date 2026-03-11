@@ -54,10 +54,10 @@ export default async function CreatorPage({ params }: Props) {
             alt={creator.display_name}
             width={80}
             height={80}
-            className="rounded-full object-cover flex-shrink-0"
+            className="rounded-full object-cover shrink-0"
           />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-[var(--surface-hover)] flex items-center justify-center text-2xl font-semibold flex-shrink-0">
+          <div className="w-20 h-20 rounded-full bg-surface-hover flex items-center justify-center text-2xl font-semibold shrink-0">
             {creator.display_name[0]}
           </div>
         )}
@@ -66,10 +66,10 @@ export default async function CreatorPage({ params }: Props) {
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
             {creator.display_name}
           </h1>
-          <p className="text-sm text-[var(--muted)] mb-3">@{creator.username}</p>
+          <p className="text-sm text-muted mb-3">@{creator.username}</p>
 
           {creator.bio && (
-            <p className="text-sm text-[var(--muted)] max-w-xl mb-4 leading-relaxed">
+            <p className="text-sm text-muted max-w-xl mb-4 leading-relaxed">
               {creator.bio}
             </p>
           )}
@@ -81,7 +81,7 @@ export default async function CreatorPage({ params }: Props) {
                 href={creator.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                className="flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors"
               >
                 <Globe size={14} />
                 Website
@@ -92,7 +92,7 @@ export default async function CreatorPage({ params }: Props) {
                 href={`https://instagram.com/${creator.instagram.replace("@", "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                className="flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors"
               >
                 <Instagram size={14} />
                 {creator.instagram}
@@ -104,7 +104,7 @@ export default async function CreatorPage({ params }: Props) {
 
       {/* Frames grid */}
       <div>
-        <p className="text-sm text-[var(--muted)] mb-6">
+        <p className="text-sm text-muted mb-6">
           {frames.length > 0
             ? `${frames.length}+ visual references`
             : "No frames yet"}

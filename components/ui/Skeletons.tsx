@@ -14,7 +14,7 @@ export function TextSkeleton({ className = "" }: { className?: string }) {
 export function AvatarSkeleton({ size = 40 }: { size?: number }) {
   return (
     <div
-      className="skeleton rounded-full flex-shrink-0"
+      className="skeleton rounded-full shrink-0"
       style={{ width: size, height: size }}
     />
   );

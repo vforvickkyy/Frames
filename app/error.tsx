@@ -19,19 +19,19 @@ export default function ErrorPage({
       <div>
         <p className="text-4xl mb-4">⚠️</p>
         <h1 className="text-xl font-semibold mb-2">Something went wrong</h1>
-        <p className="text-sm text-[var(--muted)] mb-8">
+        <p className="text-sm text-muted mb-8">
           An unexpected error occurred. Please try again.
         </p>
         <div className="flex items-center justify-center gap-4">
           <button
             onClick={reset}
-            className="px-5 py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-sm font-medium hover:opacity-80 transition-opacity"
+            className="px-5 py-2.5 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-80 transition-opacity"
           >
             Try again
           </button>
           <Link
             href="/"
-            className="px-5 py-2.5 rounded-xl border border-[var(--border)] text-sm font-medium hover:bg-[var(--surface-hover)] transition-colors"
+            className="px-5 py-2.5 rounded-xl border border-border text-sm font-medium hover:bg-surface-hover transition-colors"
           >
             Go home
           </Link>

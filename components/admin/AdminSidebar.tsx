@@ -9,7 +9,7 @@ import {
   Tag,
   Users,
   LogOut,
-  ChevronLeft,
+  ArrowLeft,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -36,35 +36,39 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
   }
 
   return (
-    <aside
-      className="w-56 flex-shrink-0 border-r border-[var(--border)] flex flex-col py-6"
-      style={{ background: "var(--surface)" }}
-    >
-      {/* Logo */}
-      <div className="px-4 mb-6">
-        <Link href="/" className="flex items-center gap-2 text-[var(--muted)] hover:text-[var(--foreground)] text-sm transition-colors mb-4">
-          <ChevronLeft size={14} />
+    <aside className="w-[220px] shrink-0 flex flex-col border-r border-border bg-surface min-h-screen">
+
+      {/* Header */}
+      <div className="px-4 pt-5 pb-4 border-b border-border">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors mb-4 group"
+        >
+          <ArrowLeft size={12} className="transition-transform duration-150 group-hover:-translate-x-0.5" />
           Back to site
         </Link>
-        <p className="font-semibold text-sm">Frames Admin</p>
-        <p className="text-xs text-[var(--muted)] truncate mt-0.5">{userEmail}</p>
+        <p className="text-[13px] font-semibold text-foreground">Frames Admin</p>
+        <p className="text-[11px] text-muted truncate mt-0.5">{userEmail}</p>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-2 space-y-0.5">
+      <nav className="flex-1 p-3 space-y-0.5">
+        <p className="text-[10px] font-semibold text-muted uppercase tracking-wider px-2 pt-1 pb-2">
+          Menu
+        </p>
         {navItems.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+              className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 ${
                 active
-                  ? "bg-[var(--surface-hover)] font-medium text-[var(--foreground)]"
-                  : "text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-hover)]"
+                  ? "bg-foreground text-background"
+                  : "text-muted hover:text-foreground hover:bg-surface-hover"
               }`}
             >
-              <Icon size={16} />
+              <Icon size={14} className="shrink-0" />
               {label}
             </Link>
           );
@@ -72,12 +76,13 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
       </nav>
 
       {/* Sign out */}
-      <div className="px-2">
+      <div className="p-3 border-t border-border">
         <button
+          type="button"
           onClick={handleSignOut}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-hover)] transition-colors"
+          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] text-muted hover:text-foreground hover:bg-surface-hover transition-all duration-150"
         >
-          <LogOut size={16} />
+          <LogOut size={14} />
           Sign out
         </button>
       </div>

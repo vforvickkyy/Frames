@@ -171,8 +171,8 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
         onClick={() => fileInputRef.current?.click()}
         className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-colors ${
           preview
-            ? "border-[var(--border)]"
-            : "border-[var(--border)] hover:border-[var(--muted)]"
+            ? "border-border"
+            : "border-border hover:border-muted"
         }`}
       >
         <input
@@ -203,7 +203,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-2 text-[var(--muted)]">
+          <div className="flex flex-col items-center gap-2 text-muted">
             <Upload size={28} />
             <p className="text-sm font-medium">Drop a file or click to upload</p>
             <p className="text-xs">GIF, JPG, PNG, MP4, WebM — up to 50 MB</p>
@@ -223,7 +223,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
             onChange={(e) => handleTitleChange(e.target.value)}
             required
             placeholder="e.g. Anamorphic Flare in Golden Hour"
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground"
           />
         </div>
 
@@ -236,7 +236,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
               setForm((p) => ({ ...p, slug: slugify(e.target.value) }))
             }
             placeholder="auto-generated from title"
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)] font-mono"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground font-mono"
           />
         </div>
 
@@ -249,7 +249,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
             }
             rows={3}
             placeholder="Brief description of this frame…"
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)] resize-none"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground resize-none"
           />
         </div>
 
@@ -260,7 +260,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
             onChange={(e) =>
               setForm((p) => ({ ...p, category_id: e.target.value }))
             }
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground"
           >
             <option value="">— None —</option>
             {categories.map((cat) => (
@@ -280,7 +280,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
               setForm((p) => ({ ...p, creatorUsername: e.target.value }))
             }
             placeholder="e.g. johndoe"
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground"
           />
         </div>
 
@@ -293,7 +293,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
             }
             rows={2}
             placeholder="Camera, lens, lighting setup, post-production details…"
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)] resize-none"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground resize-none"
           />
         </div>
 
@@ -306,7 +306,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
               setForm((p) => ({ ...p, rank: e.target.value }))
             }
             min={0}
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground"
           />
         </div>
 
@@ -321,7 +321,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
               setForm((p) => ({ ...p, tagsInput: e.target.value }))
             }
             placeholder="anamorphic, bokeh, neon"
-            className="w-full px-3 py-2.5 text-sm rounded-xl border border-[var(--border)] bg-[var(--surface)] outline-none focus:ring-2 focus:ring-[var(--foreground)]"
+            className="w-full px-3 py-2.5 text-sm rounded-xl border border-border bg-surface outline-none focus:ring-2 focus:ring-foreground"
           />
         </div>
       </div>
@@ -338,8 +338,8 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
                 onClick={() => toggleTag(tag.slug)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                   form.selectedTags.includes(tag.slug)
-                    ? "bg-[var(--foreground)] text-[var(--background)]"
-                    : "border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                    ? "bg-foreground text-background"
+                    : "border border-border text-muted hover:text-foreground"
                 }`}
               >
                 {tag.name}
@@ -365,7 +365,7 @@ export default function UploadForm({ categories, tags }: UploadFormProps) {
       <button
         type="submit"
         disabled={uploading || !file}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-foreground text-background text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
       >
         {success ? (
           <>

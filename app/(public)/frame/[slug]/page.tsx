@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import { getFrameBySlug, getRelatedFrames } from "@/lib/queries";
 import MasonryGrid from "@/components/frames/MasonryGrid";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -78,11 +80,22 @@ export default async function FramePage({ params }: Props) {
       />
 
       {/* 2-col full-bleed layout */}
-      <div className="flex min-h-screen">
+      <Box sx={{ display: "flex", minHeight: "100vh" }}>
 
-        {/* Left — sticky image viewer */}
-        <div
-          className="frame-detail-left-sticky hidden lg:flex w-[60%] sticky top-13 items-center justify-center p-8"
+        {/* Left — sticky image viewer (desktop only) */}
+        <Box
+          sx={{
+            display: { xs: "none", lg: "flex" },
+            width: "60%",
+            flexShrink: 0,
+            position: "sticky",
+            top: 52,
+            height: "calc(100vh - 52px)",
+            alignItems: "center",
+            justifyContent: "center",
+            p: 4,
+            bgcolor: "background.paper",
+          }}
         >
           {frame.file_url && (
             <Image
@@ -90,41 +103,68 @@ export default async function FramePage({ params }: Props) {
               alt={frame.title}
               width={1200}
               height={800}
-              className="max-h-full max-w-full object-contain rounded-xl"
+              style={{
+                maxHeight: "100%",
+                maxWidth: "100%",
+                objectFit: "contain",
+                borderRadius: 16,
+              }}
               priority
               unoptimized={isGif}
             />
           )}
-        </div>
+        </Box>
 
         {/* Right — scrollable metadata */}
-        <div className="w-full lg:w-[40%] p-8 lg:p-10 overflow-y-auto">
+        <Box sx={{ width: { xs: "100%", lg: "40%" }, p: { xs: 3, lg: 5 }, overflowY: "auto" }}>
 
           {/* Mobile image */}
-          <div className="lg:hidden mb-8 rounded-xl overflow-hidden frame-detail-left">
+          <Box
+            sx={{
+              display: { xs: "block", lg: "none" },
+              mb: 4,
+              borderRadius: 2,
+              overflow: "hidden",
+              bgcolor: "background.paper",
+            }}
+          >
             {frame.file_url && (
               <Image
                 src={frame.file_url}
                 alt={frame.title}
                 width={1200}
                 height={800}
-                className="w-full h-auto object-contain"
+                style={{ width: "100%", height: "auto", objectFit: "contain", display: "block" }}
                 priority
                 unoptimized={isGif}
               />
             )}
-          </div>
+          </Box>
 
           <FrameDetailSidebar frame={frame} />
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       {/* Related frames */}
       {related.length > 0 && (
-        <section className="max-w-7xl mx-auto px-6 py-16">
-          <SectionHeader title="Related Frames" />
+        <Box
+          component="section"
+          sx={{ maxWidth: "88rem", mx: "auto", px: { xs: 3, md: 4 }, py: 8 }}
+        >
+          <Typography
+            sx={{
+              fontSize: 11,
+              textTransform: "uppercase",
+              letterSpacing: "0.12em",
+              color: "text.disabled",
+              mb: 3,
+              fontWeight: 500,
+            }}
+          >
+            Related Frames
+          </Typography>
           <MasonryGrid frames={related} />
-        </section>
+        </Box>
       )}
     </>
   );

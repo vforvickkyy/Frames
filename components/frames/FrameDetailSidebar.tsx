@@ -3,6 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import { useTheme } from "@mui/material/styles";
 import { Eye, ArrowSquareOut } from "@phosphor-icons/react";
 import type { Frame } from "@/types";
 
@@ -13,38 +18,75 @@ interface Props {
 const item = (i: number) => ({
   initial: { opacity: 0, x: 16 },
   animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay: i * 0.07 },
+  transition: {
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    delay: i * 0.07,
+  },
 });
 
-export default function FrameDetailSidebar({ frame }: Props) {
+function Label({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-8">
+    <Typography
+      sx={{
+        fontSize: 11,
+        textTransform: "uppercase",
+        letterSpacing: "0.1em",
+        color: "text.disabled",
+        mb: 1,
+        fontWeight: 500,
+      }}
+    >
+      {children}
+    </Typography>
+  );
+}
+
+export default function FrameDetailSidebar({ frame }: Props) {
+  const theme = useTheme();
+
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
 
       {/* Title */}
       <motion.div {...item(0)}>
-        <h1 className="text-xl font-semibold leading-snug" style={{ color: "var(--text)" }}>
+        <Typography
+          variant="h2"
+          sx={{ fontSize: "1.25rem", fontWeight: 600, letterSpacing: "-0.02em", lineHeight: 1.3, color: "text.primary" }}
+        >
           {frame.title}
-        </h1>
+        </Typography>
         {frame.description && (
-          <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
+          <Typography sx={{ mt: 1.5, fontSize: 14, lineHeight: 1.65, color: "text.secondary" }}>
             {frame.description}
-          </p>
+          </Typography>
         )}
       </motion.div>
 
       {/* Views */}
-      <motion.div {...item(1)} className="frame-detail-views flex items-center gap-1.5">
-        <Eye size={14} weight="regular" />
-        {frame.view_count.toLocaleString()} views
+      <motion.div {...item(1)}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, color: "text.disabled", fontSize: 12 }}>
+          <Eye size={13} weight="regular" />
+          <span>{frame.view_count.toLocaleString()} views</span>
+        </Box>
       </motion.div>
+
+      <Divider />
 
       {/* Creator */}
       {frame.creator && (
         <motion.div {...item(2)}>
-          <p className="frame-detail-label">Creator</p>
-          <Link
+          <Label>Creator</Label>
+          <Box
+            component={Link}
             href={`/creator/${frame.creator.username}`}
-            className="flex items-center gap-3 group"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              textDecoration: "none",
+              "&:hover .creator-name": { textDecoration: "underline" },
+            }}
           >
             {frame.creator.avatar_url ? (
               <Image
@@ -52,81 +94,112 @@ export default function FrameDetailSidebar({ frame }: Props) {
                 alt={frame.creator.display_name}
                 width={36}
                 height={36}
-                className="rounded-full object-cover"
+                style={{ borderRadius: "50%", objectFit: "cover" }}
               />
             ) : (
-              <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium"
-                style={{ background: "var(--surface-2)", color: "var(--text)" }}
+              <Box
+                sx={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                  background: theme.palette.action.selected,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "text.primary",
+                  flexShrink: 0,
+                }}
               >
                 {frame.creator.display_name[0]}
-              </div>
+              </Box>
             )}
-            <div>
-              <p className="text-sm font-medium group-hover:underline" style={{ color: "var(--text)" }}>
+            <Box>
+              <Typography
+                className="creator-name"
+                sx={{ fontSize: 14, fontWeight: 500, color: "text.primary", lineHeight: 1.3 }}
+              >
                 {frame.creator.display_name}
-              </p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+              </Typography>
+              <Typography sx={{ fontSize: 12, color: "text.secondary" }}>
                 @{frame.creator.username}
-              </p>
-            </div>
-          </Link>
+              </Typography>
+            </Box>
+          </Box>
         </motion.div>
       )}
 
       {/* Category */}
       {frame.category && (
         <motion.div {...item(3)}>
-          <p className="frame-detail-label">Category</p>
-          <Link
+          <Label>Category</Label>
+          <Chip
+            component={Link}
             href={`/category/${frame.category.slug}`}
-            className="frame-detail-tag"
-          >
-            {frame.category.name}
-          </Link>
+            label={frame.category.name}
+            variant="outlined"
+            clickable
+            sx={{ textDecoration: "none" }}
+          />
         </motion.div>
       )}
 
       {/* Tags */}
       {frame.tags && frame.tags.length > 0 && (
         <motion.div {...item(4)}>
-          <p className="frame-detail-label">Tags</p>
-          <div className="flex flex-wrap gap-2">
+          <Label>Tags</Label>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
             {frame.tags.map((tag) => (
-              <Link
+              <Chip
                 key={tag}
+                component={Link}
                 href={`/search?tag=${encodeURIComponent(tag)}`}
-                className="frame-detail-tag"
-              >
-                {tag}
-              </Link>
+                label={tag}
+                variant="outlined"
+                size="small"
+                clickable
+                sx={{ textDecoration: "none", height: 26, fontSize: 11 }}
+              />
             ))}
-          </div>
+          </Box>
         </motion.div>
       )}
 
       {/* Technique notes */}
       {frame.technique_notes && (
         <motion.div {...item(5)}>
-          <p className="frame-detail-label">Technique</p>
-          <p className="frame-detail-value leading-relaxed">{frame.technique_notes}</p>
+          <Label>Technique</Label>
+          <Typography sx={{ fontSize: 14, lineHeight: 1.65, color: "text.primary" }}>
+            {frame.technique_notes}
+          </Typography>
         </motion.div>
       )}
 
       {/* View original */}
       {frame.file_url && (
         <motion.div {...item(6)}>
-          <a
+          <Box
+            component="a"
             href={frame.file_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="frame-detail-external"
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 0.75,
+              fontSize: 14,
+              color: "text.secondary",
+              textDecoration: "none",
+              transition: "color 0.15s ease",
+              "&:hover": { color: "text.primary" },
+            }}
           >
             <ArrowSquareOut size={15} weight="regular" />
             View original
-          </a>
+          </Box>
         </motion.div>
       )}
-    </div>
+    </Box>
   );
 }

@@ -1,5 +1,8 @@
 import { getAdminStats } from "@/lib/queries";
 import Link from "next/link";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
 import {
   FilmStrip,
   Users,
@@ -13,117 +16,293 @@ import {
 export default async function AdminOverviewPage() {
   const stats = await getAdminStats();
 
-  return (
-    <div className="fade-in">
+  const statCards = [
+    {
+      label: "Total Frames",
+      value: stats.totalFrames,
+      icon: FilmStrip,
+      href: "/admin/content",
+      accentColor: "#3b82f6",
+    },
+    {
+      label: "Total Views",
+      value: stats.totalViews.toLocaleString(),
+      icon: Eye,
+      href: null,
+      accentColor: "#8b5cf6",
+    },
+    {
+      label: "Creators",
+      value: stats.totalCreators,
+      icon: Users,
+      href: "/admin/creators",
+      accentColor: "#10b981",
+    },
+    {
+      label: "Categories",
+      value: stats.totalCategories,
+      icon: Tag,
+      href: "/admin/categories",
+      accentColor: "#f59e0b",
+    },
+  ];
 
+  return (
+    <Box>
       {/* Page header */}
-      <div className="mb-8">
-        <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Overview</h1>
-        <p className="text-[13px] text-muted mt-1">Your Frames platform at a glance.</p>
-      </div>
+      <Box sx={{ mb: 5 }}>
+        <Typography
+          sx={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em", color: "text.primary" }}
+        >
+          Overview
+        </Typography>
+        <Typography sx={{ fontSize: 13, color: "text.secondary", mt: 0.5 }}>
+          Your Frames platform at a glance.
+        </Typography>
+      </Box>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {[
-          { label: "Total Frames", value: stats.totalFrames,                icon: FilmStrip, href: "/admin/content",    accent: "border-l-[3px] border-l-blue-500"    },
-          { label: "Total Views",  value: stats.totalViews.toLocaleString(), icon: Eye,       href: null,                accent: "border-l-[3px] border-l-violet-500"  },
-          { label: "Creators",     value: stats.totalCreators,               icon: Users,     href: "/admin/creators",   accent: "border-l-[3px] border-l-emerald-500" },
-          { label: "Categories",   value: stats.totalCategories,             icon: Tag,       href: "/admin/categories", accent: "border-l-[3px] border-l-amber-500"   },
-        ].map(({ label, value, icon: Icon, href, accent }) => (
-          <div key={label} className={`admin-card p-5 flex flex-col gap-3 ${accent}`}>
-            <div className="flex items-center justify-between">
-              <p className="text-[11px] font-semibold text-muted uppercase tracking-wider">{label}</p>
-              <span className="p-1.5 rounded-lg bg-surface-hover">
-                <Icon size={13} weight="regular" className="text-muted" />
-              </span>
-            </div>
-            <p className="text-[28px] font-semibold tracking-tight leading-none">{value}</p>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" },
+          gap: 1.5,
+          mb: 4,
+        }}
+      >
+        {statCards.map(({ label, value, icon: Icon, href, accentColor }) => (
+          <Paper
+            key={label}
+            sx={{
+              p: 2.5,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              borderLeft: `3px solid ${accentColor}`,
+              borderRadius: "0 12px 12px 0",
+              bgcolor: "background.paper",
+              border: "1px solid",
+              borderColor: "divider",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                {label}
+              </Typography>
+              <Box
+                sx={{
+                  p: 0.75,
+                  borderRadius: 1.5,
+                  bgcolor: "action.selected",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Icon size={13} weight="regular" style={{ color: "inherit", opacity: 0.5 }} />
+              </Box>
+            </Box>
+
+            <Typography
+              sx={{
+                fontSize: 28,
+                fontWeight: 600,
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+                color: "text.primary",
+              }}
+            >
+              {value}
+            </Typography>
+
             {href && (
-              <Link
+              <Box
+                component={Link}
                 href={href}
-                className="inline-flex items-center gap-1 text-[11px] text-muted hover:text-foreground transition-colors group"
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  fontSize: 11,
+                  color: "text.secondary",
+                  textDecoration: "none",
+                  transition: "color 0.12s ease",
+                  "&:hover": { color: "text.primary" },
+                  "&:hover .arrow": { transform: "translateX(2px)" },
+                }}
               >
                 View all
-                <ArrowRight size={10} weight="regular" className="transition-transform duration-150 group-hover:translate-x-0.5" />
-              </Link>
+                <Box className="arrow" sx={{ display: "flex", transition: "transform 0.15s ease" }}>
+                  <ArrowRight size={10} weight="regular" />
+                </Box>
+              </Box>
             )}
-          </div>
+          </Paper>
         ))}
-      </div>
+      </Box>
 
-      <div className="grid lg:grid-cols-2 gap-4">
-
+      {/* Bottom grid */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", lg: "repeat(2, 1fr)" },
+          gap: 2,
+        }}
+      >
         {/* Top performing frames */}
-        <div className="admin-card p-5">
-          <div className="flex items-center gap-2 mb-5">
-            <ChartLine size={14} weight="regular" className="text-muted" />
-            <h2 className="text-[13px] font-semibold">Top Performing Frames</h2>
-          </div>
+        <Paper
+          sx={{
+            p: 2.5,
+            bgcolor: "background.paper",
+            border: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+            <ChartLine size={14} weight="regular" style={{ opacity: 0.4 }} />
+            <Typography sx={{ fontSize: 13, fontWeight: 600 }}>Top Performing Frames</Typography>
+          </Box>
+
           {stats.topFrames.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <FilmStrip size={22} weight="regular" className="text-muted/40 mb-2" />
-              <p className="text-[13px] text-muted">No frames yet.</p>
-            </div>
+            <Box sx={{ py: 5, textAlign: "center" }}>
+              <FilmStrip size={22} weight="regular" style={{ opacity: 0.2, display: "block", margin: "0 auto 8px" }} />
+              <Typography sx={{ fontSize: 13, color: "text.secondary" }}>No frames yet.</Typography>
+            </Box>
           ) : (
-            <div className="space-y-0.5">
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
               {stats.topFrames.map((frame, i) => (
-                <div
+                <Box
                   key={frame.id}
-                  className="flex items-center justify-between gap-4 px-3 py-2.5 rounded-lg hover:bg-surface-hover transition-colors group"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 2,
+                    px: 1.5,
+                    py: 1.25,
+                    borderRadius: 1.5,
+                    transition: "background 0.12s ease",
+                    "&:hover": { bgcolor: "action.hover" },
+                    "&:hover .edit-link": { opacity: 1 },
+                  }}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-[11px] text-muted w-4 shrink-0 text-center tabular-nums">{i + 1}</span>
-                    <div className="min-w-0">
-                      <Link
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
+                    <Typography
+                      sx={{ fontSize: 11, color: "text.disabled", width: 16, flexShrink: 0, textAlign: "center", fontVariantNumeric: "tabular-nums" }}
+                    >
+                      {i + 1}
+                    </Typography>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Box
+                        component={Link}
                         href={`/frame/${frame.slug}`}
-                        className="text-[13px] font-medium hover:underline truncate block"
+                        sx={{
+                          fontSize: 13,
+                          fontWeight: 500,
+                          display: "block",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          color: "text.primary",
+                          textDecoration: "none",
+                          "&:hover": { textDecoration: "underline" },
+                        }}
                       >
                         {frame.title}
-                      </Link>
-                      <p className="text-[11px] text-muted">
+                      </Box>
+                      <Typography sx={{ fontSize: 11, color: "text.secondary" }}>
                         {(frame.view_count ?? 0).toLocaleString()} views
-                      </p>
-                    </div>
-                  </div>
-                  <Link
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box
+                    className="edit-link"
+                    component={Link}
                     href={`/admin/content?edit=${frame.id}`}
-                    className="text-[11px] text-muted hover:text-foreground opacity-0 group-hover:opacity-100 transition-all shrink-0"
+                    sx={{
+                      fontSize: 11,
+                      color: "text.secondary",
+                      textDecoration: "none",
+                      flexShrink: 0,
+                      opacity: 0,
+                      transition: "opacity 0.15s ease, color 0.12s ease",
+                      "&:hover": { color: "text.primary" },
+                    }}
                   >
                     Edit
-                  </Link>
-                </div>
+                  </Box>
+                </Box>
               ))}
-            </div>
+            </Box>
           )}
-        </div>
+        </Paper>
 
         {/* Quick actions */}
-        <div className="admin-card p-5">
-          <h2 className="text-[13px] font-semibold mb-5">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-2">
+        <Paper
+          sx={{
+            p: 2.5,
+            bgcolor: "background.paper",
+            border: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          <Typography sx={{ fontSize: 13, fontWeight: 600, mb: 3 }}>Quick Actions</Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: 1,
+            }}
+          >
             {[
               { href: "/admin/upload",     label: "Upload Frame",    icon: UploadSimple, primary: true },
               { href: "/admin/content",    label: "Manage Content",  icon: FilmStrip                  },
               { href: "/admin/creators",   label: "Add Creator",     icon: Users                      },
               { href: "/admin/categories", label: "Edit Categories", icon: Tag                        },
             ].map(({ href, label, icon: Icon, primary }) => (
-              <Link
+              <Box
                 key={href}
+                component={Link}
                 href={href}
-                className={`flex items-center gap-2.5 p-3.5 rounded-xl text-[13px] font-medium transition-all duration-150 ${
-                  primary
-                    ? "bg-foreground text-background hover:opacity-80"
-                    : "border border-border hover:bg-surface-hover"
-                }`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.25,
+                  p: 1.75,
+                  borderRadius: 2,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "opacity 0.15s ease, background 0.12s ease",
+                  ...(primary
+                    ? {
+                        bgcolor: "text.primary",
+                        color: "background.default",
+                        "&:hover": { opacity: 0.82 },
+                      }
+                    : {
+                        border: "1px solid",
+                        borderColor: "divider",
+                        color: "text.secondary",
+                        "&:hover": { bgcolor: "action.hover", color: "text.primary" },
+                      }),
+                }}
               >
-                <Icon size={14} weight="regular" className={primary ? "opacity-70" : "text-muted"} />
+                <Icon size={14} weight="regular" style={{ opacity: primary ? 0.7 : 0.6, flexShrink: 0 }} />
                 {label}
-              </Link>
+              </Box>
             ))}
-          </div>
-        </div>
-
-      </div>
-    </div>
+          </Box>
+        </Paper>
+      </Box>
+    </Box>
   );
 }

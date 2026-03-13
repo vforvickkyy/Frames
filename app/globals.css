@@ -2,354 +2,15 @@
 @source "../app/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../components/**/*.{js,ts,jsx,tsx,mdx}";
 
-/* =============================================
-   DESIGN TOKENS — dark default (Linear/React.gg inspired)
-   ============================================= */
-
-:root {
-  --bg: #0a0a0a;
-  --surface: #111111;
-  --surface-2: #1a1a1a;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.14);
-  --text: #ededed;
-  --text-muted: rgba(255, 255, 255, 0.4);
-  --text-faint: rgba(255, 255, 255, 0.2);
-  --accent: #ffffff;
-}
-
-[data-theme="light"] {
-  --bg: #ffffff;
-  --surface: #f5f5f5;
-  --surface-2: #ebebeb;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.16);
-  --text: #0a0a0a;
-  --text-muted: rgba(0, 0, 0, 0.45);
-  --text-faint: rgba(0, 0, 0, 0.25);
-  --accent: #0a0a0a;
-}
-
-@theme inline {
-  --color-background: var(--bg);
-  --color-foreground: var(--text);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-surface-hover: var(--surface-2);
-  --color-muted: var(--text-muted);
-  --color-border: var(--border);
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-}
-
-/* =============================================
-   BASE RESET
-   ============================================= */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  width: 100%;
-}
-
-body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.6;
-  min-height: 100dvh;
-  width: 100%;
-  overflow-x: hidden;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-h1 {
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.03;
-}
-
-h2 {
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-hover);
-  border-radius: 99px;
-}
-
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-
-::selection {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: var(--text);
-}
-
-[data-theme="light"] ::selection {
-  background-color: rgba(0, 0, 0, 0.1);
-  color: var(--text);
-}
-
-/* =============================================
-   KEYFRAMES
-   ============================================= */
-
-@keyframes shimmer {
-  from { transform: translate3d(-100%, 0, 0); }
-  to   { transform: translate3d(200%, 0, 0); }
-}
-
-/* =============================================
-   HEADER
-   ============================================= */
-
-.header-search-input {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  transition: border-color 0.15s ease;
-}
-
-.header-search-input::placeholder {
-  color: var(--text-muted);
-}
-
-.header-search-input:focus {
-  border-color: var(--border-hover);
-  outline: none;
-}
-
-.header-icon-btn {
-  color: var(--text-muted);
-}
-
-.header-mobile-nav {
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-}
-
-/* =============================================
-   HERO SEARCH
-   ============================================= */
-
-.hero-search-form {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  border-radius: 9999px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.hero-search-form:focus-within {
-  border-color: var(--border-hover);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="light"] .hero-search-form:focus-within {
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
-}
-
-.hero-search-icon {
-  color: var(--text-faint);
-}
-
-.hero-search-input {
-  color: var(--text);
-}
-
-.hero-search-input::placeholder {
-  color: var(--text-faint);
-}
-
-.hero-search-btn {
-  background: var(--accent);
-  color: var(--bg);
-  transition: opacity 0.15s ease;
-}
-
-.hero-search-btn:hover {
-  opacity: 0.85;
-}
-
-/* =============================================
-   FRAME CARD
-   ============================================= */
-
-.frame-card-shell {
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-
-.frame-card-overlay {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.82) 0%,
-    rgba(0, 0, 0, 0.2) 50%,
-    transparent 100%
-  );
-}
-
-.frame-card-category {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* =============================================
-   CATEGORY PILLS
-   ============================================= */
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  border-radius: 9999px;
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  background: transparent;
-  font-size: 12px;
-  padding: 6px 14px;
-  transition: border-color 0.15s ease, color 0.15s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.pill:hover {
-  border-color: var(--border-hover);
-  color: var(--text);
-}
-
-.pill-active {
-  background: var(--accent);
-  color: var(--bg);
-  border-color: transparent;
-}
-
-.pill-active:hover {
-  border-color: transparent;
-  color: var(--bg);
-  opacity: 0.88;
-}
-
-/* =============================================
-   FRAME DETAIL PAGE
-   ============================================= */
-
-.frame-detail-left {
-  background: var(--surface);
-}
-
-.frame-detail-left-sticky {
-  background: var(--surface);
-  height: calc(100vh - 52px);
-}
-
-.frame-detail-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-faint);
-  margin-bottom: 8px;
-}
-
-.frame-detail-value {
-  font-size: 14px;
-  color: var(--text);
-}
-
-.frame-detail-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  border: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.frame-detail-tag:hover {
-  border-color: var(--border-hover);
-  color: var(--text);
-}
-
-.frame-detail-views {
-  font-size: 12px;
-  color: var(--text-faint);
-}
-
-.frame-detail-external {
-  font-size: 14px;
-  color: var(--text-muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.frame-detail-external:hover {
-  color: var(--text);
-}
-
-/* =============================================
-   SECTION LABEL
-   ============================================= */
-
-.section-faint {
-  color: var(--text-faint);
-}
-
-/* =============================================
-   MASONRY GRID
-   ============================================= */
-
+/* ── Masonry grid ─────────────────────────────────────────────── */
 .masonry-grid {
   columns: 2;
   column-gap: 8px;
   width: 100%;
 }
-
-@media (min-width: 640px) {
-  .masonry-grid { columns: 3; }
-}
-
-@media (min-width: 1024px) {
-  .masonry-grid { columns: 4; }
-}
-
-@media (min-width: 1400px) {
-  .masonry-grid { columns: 5; }
-}
+@media (min-width: 640px)  { .masonry-grid { columns: 3; } }
+@media (min-width: 1024px) { .masonry-grid { columns: 4; } }
+@media (min-width: 1400px) { .masonry-grid { columns: 5; } }
 
 .masonry-item {
   break-inside: avoid;
@@ -357,17 +18,18 @@ h2 {
   display: block;
 }
 
-/* =============================================
-   SKELETON SHIMMER
-   ============================================= */
+/* ── Skeleton shimmer ─────────────────────────────────────────── */
+@keyframes shimmer {
+  from { transform: translate3d(-100%, 0, 0); }
+  to   { transform: translate3d(200%, 0, 0); }
+}
 
 .skeleton {
   position: relative;
   overflow: hidden;
-  background-color: var(--surface);
+  background-color: #111111;
   border-radius: 12px;
 }
-
 .skeleton::after {
   content: "";
   position: absolute;
@@ -381,6 +43,7 @@ h2 {
   animation: shimmer 2s ease-in-out infinite;
 }
 
+[data-theme="light"] .skeleton              { background-color: #f0f0f0; }
 [data-theme="light"] .skeleton::after {
   background: linear-gradient(
     105deg,
@@ -390,76 +53,11 @@ h2 {
   );
 }
 
-/* =============================================
-   ADMIN
-   ============================================= */
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Scrollbar utilities ──────────────────────────────────────── */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-.fade-in {
-  animation: fade-in 0.35s ease both;
-}
-
-.admin-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-
-.admin-sidebar {
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-}
-
-.admin-sidebar-header {
-  border-bottom: 1px solid var(--border);
-}
-
-.admin-back-link {
-  color: var(--text-faint);
-  transition: color 0.15s ease;
-}
-
-.admin-back-link:hover {
-  color: var(--text-muted);
-}
-
-.admin-title {
-  color: var(--text);
-}
-
-.admin-subtitle {
-  color: var(--text-faint);
-}
-
-.admin-section-label {
-  color: var(--text-faint);
-}
-
-.admin-nav-link {
-  color: var(--text-muted);
-  transition: background-color 0.12s ease, color 0.12s ease;
-}
-
-.admin-nav-link:hover {
-  background: var(--surface-2);
-  color: var(--text);
-}
-
-.admin-nav-link-active {
-  background: var(--surface-2);
-  color: var(--text);
-}
-
-.admin-modal-backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
-.admin-modal-panel {
-  background: var(--surface);
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }

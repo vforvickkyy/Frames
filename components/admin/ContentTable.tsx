@@ -4,9 +4,31 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Chip from "@mui/material/Chip";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import { createClient } from "@/lib/supabase/client";
 import type { Frame } from "@/types";
-import { Eye, EyeSlash, Trash, ArrowSquareOut, PencilSimple, X } from "@phosphor-icons/react";
+import { Eye, EyeSlash, Trash, ArrowSquareOut, PencilSimple } from "@phosphor-icons/react";
 
 interface SimpleCategory { id: string; name: string; slug: string; }
 interface SimpleCreator  { id: string; display_name: string; username: string; }
@@ -56,11 +78,8 @@ export default function ContentTable({ frames: initialFrames, categories, creato
       .from("frames")
       .update({ is_hidden: !frame.is_hidden })
       .eq("id", frame.id);
-
     if (!error) {
-      setFrames((prev) =>
-        prev.map((f) => f.id === frame.id ? { ...f, is_hidden: !f.is_hidden } : f)
-      );
+      setFrames((prev) => prev.map((f) => f.id === frame.id ? { ...f, is_hidden: !f.is_hidden } : f));
     }
     setLoading(null);
   }
@@ -89,10 +108,7 @@ export default function ContentTable({ frames: initialFrames, categories, creato
     if (!editingFrame || !editState) return;
     setSaving(true);
     const supabase = createClient();
-    const tags = editState.tags
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
+    const tags = editState.tags.split(",").map((t) => t.trim()).filter(Boolean);
 
     const { error } = await supabase
       .from("frames")
@@ -136,282 +152,329 @@ export default function ContentTable({ frames: initialFrames, categories, creato
 
   if (frames.length === 0) {
     return (
-      <p className="text-sm text-muted py-8 text-center">
+      <Typography sx={{ fontSize: 14, color: "text.secondary", py: 6, textAlign: "center" }}>
         No frames yet.{" "}
-        <Link href="/admin/upload" className="underline">Upload one</Link>.
-      </p>
+        <Box component={Link} href="/admin/upload" sx={{ color: "text.primary", textDecoration: "underline" }}>
+          Upload one
+        </Box>
+        .
+      </Typography>
     );
   }
 
+  const actionBtnSx = {
+    p: 0.75,
+    borderRadius: 1.5,
+    color: "text.secondary",
+    "&:hover": { bgcolor: "action.hover", color: "text.primary" },
+  };
+
   return (
     <>
-      <div className="overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border bg-surface">
-              <th className="px-4 py-3 text-left font-medium text-muted w-16" />
-              <th className="px-4 py-3 text-left font-medium text-muted">Title</th>
-              <th className="px-4 py-3 text-left font-medium text-muted hidden sm:table-cell">Category</th>
-              <th className="px-4 py-3 text-left font-medium text-muted hidden md:table-cell">Creator</th>
-              <th className="px-4 py-3 text-right font-medium text-muted hidden lg:table-cell">Rank</th>
-              <th className="px-4 py-3 text-right font-medium text-muted hidden lg:table-cell">Views</th>
-              <th className="px-4 py-3 text-center font-medium text-muted">Status</th>
-              <th className="px-4 py-3 text-right font-medium text-muted">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: 60 }} />
+              <TableCell>Title</TableCell>
+              <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>Category</TableCell>
+              <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>Creator</TableCell>
+              <TableCell align="right" sx={{ display: { xs: "none", lg: "table-cell" } }}>Rank</TableCell>
+              <TableCell align="right" sx={{ display: { xs: "none", lg: "table-cell" } }}>Views</TableCell>
+              <TableCell align="center">Status</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {frames.map((frame) => (
-              <tr
-                key={frame.id}
-                className={`border-b border-border last:border-0 transition-colors hover:bg-surface-hover ${
-                  frame.is_hidden ? "opacity-50" : ""
-                }`}
-              >
+              <TableRow key={frame.id} sx={{ opacity: frame.is_hidden ? 0.5 : 1 }}>
+
                 {/* Thumbnail */}
-                <td className="px-4 py-3">
-                  <div className="w-12 h-10 rounded-lg overflow-hidden bg-surface-hover shrink-0">
+                <TableCell>
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 40,
+                      borderRadius: 1.5,
+                      overflow: "hidden",
+                      bgcolor: "action.selected",
+                      flexShrink: 0,
+                    }}
+                  >
                     {(frame.thumbnail_url || frame.file_url) && (
                       <Image
                         src={frame.thumbnail_url || frame.file_url}
                         alt={frame.title}
                         width={48}
                         height={40}
-                        className="w-full h-full object-cover"
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
                         unoptimized
                       />
                     )}
-                  </div>
-                </td>
+                  </Box>
+                </TableCell>
 
                 {/* Title */}
-                <td className="px-4 py-3">
-                  <p className="font-medium truncate max-w-45">{frame.title}</p>
-                  <p className="text-xs text-muted font-mono truncate">{frame.slug}</p>
-                </td>
+                <TableCell>
+                  <Typography
+                    sx={{
+                      fontSize: 13,
+                      fontWeight: 500,
+                      color: "text.primary",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      maxWidth: 200,
+                    }}
+                  >
+                    {frame.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 11,
+                      color: "text.disabled",
+                      fontFamily: "monospace",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {frame.slug}
+                  </Typography>
+                </TableCell>
 
                 {/* Category */}
-                <td className="px-4 py-3 hidden sm:table-cell text-muted">
+                <TableCell sx={{ display: { xs: "none", sm: "table-cell" }, color: "text.secondary" }}>
                   {frame.category?.name || "—"}
-                </td>
+                </TableCell>
 
                 {/* Creator */}
-                <td className="px-4 py-3 hidden md:table-cell text-muted">
+                <TableCell sx={{ display: { xs: "none", md: "table-cell" }, color: "text.secondary" }}>
                   {frame.creator?.display_name || "—"}
-                </td>
+                </TableCell>
 
                 {/* Rank */}
-                <td className="px-4 py-3 text-right hidden lg:table-cell text-muted">{frame.rank}</td>
+                <TableCell align="right" sx={{ display: { xs: "none", lg: "table-cell" }, color: "text.secondary" }}>
+                  {frame.rank}
+                </TableCell>
 
                 {/* Views */}
-                <td className="px-4 py-3 text-right hidden lg:table-cell text-muted">
+                <TableCell align="right" sx={{ display: { xs: "none", lg: "table-cell" }, color: "text.secondary" }}>
                   {frame.view_count?.toLocaleString()}
-                </td>
+                </TableCell>
 
                 {/* Status */}
-                <td className="px-4 py-3 text-center">
-                  <span
-                    className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                      frame.is_hidden
-                        ? "bg-surface-hover text-muted"
-                        : "bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400"
-                    }`}
-                  >
-                    {frame.is_hidden ? "Hidden" : "Live"}
-                  </span>
-                </td>
+                <TableCell align="center">
+                  <Chip
+                    label={frame.is_hidden ? "Hidden" : "Live"}
+                    size="small"
+                    sx={{
+                      height: 22,
+                      fontSize: 11,
+                      borderRadius: "9999px",
+                      ...(frame.is_hidden
+                        ? { bgcolor: "action.selected", color: "text.disabled" }
+                        : { bgcolor: "rgba(16,185,129,0.12)", color: "rgb(16,185,129)" }
+                      ),
+                    }}
+                  />
+                </TableCell>
 
                 {/* Actions */}
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-1">
-                    <button
-                      type="button"
-                      onClick={() => openEdit(frame)}
-                      className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
-                      title="Edit"
-                    >
-                      <PencilSimple size={14} weight="regular" />
-                    </button>
-                    <Link
-                      href={`/frame/${frame.slug}`}
-                      target="_blank"
-                      className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
-                      title="View"
-                    >
-                      <ArrowSquareOut size={14} weight="regular" />
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => toggleHidden(frame)}
-                      disabled={loading === frame.id}
-                      className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
-                      title={frame.is_hidden ? "Show" : "Hide"}
-                    >
-                      {frame.is_hidden ? <Eye size={14} weight="regular" /> : <EyeSlash size={14} weight="regular" />}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => deleteFrame(frame)}
-                      disabled={loading === frame.id}
-                      className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-muted hover:text-red-500 transition-colors"
-                      title="Delete"
-                    >
-                      <Trash size={14} weight="regular" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                <TableCell align="right">
+                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0.25 }}>
+                    <Tooltip title="Edit" arrow>
+                      <IconButton
+                        size="small"
+                        onClick={() => openEdit(frame)}
+                        sx={actionBtnSx}
+                      >
+                        <PencilSimple size={14} weight="regular" />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="View" arrow>
+                      <IconButton
+                        size="small"
+                        component={Link}
+                        href={`/frame/${frame.slug}`}
+                        target="_blank"
+                        sx={actionBtnSx}
+                      >
+                        <ArrowSquareOut size={14} weight="regular" />
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title={frame.is_hidden ? "Show" : "Hide"} arrow>
+                      <IconButton
+                        size="small"
+                        onClick={() => toggleHidden(frame)}
+                        disabled={loading === frame.id}
+                        sx={actionBtnSx}
+                      >
+                        {frame.is_hidden
+                          ? <Eye size={14} weight="regular" />
+                          : <EyeSlash size={14} weight="regular" />
+                        }
+                      </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Delete" arrow>
+                      <IconButton
+                        size="small"
+                        onClick={() => deleteFrame(frame)}
+                        disabled={loading === frame.id}
+                        sx={{
+                          ...actionBtnSx,
+                          "&:hover": { bgcolor: "rgba(239,68,68,0.1)", color: "#ef4444" },
+                        }}
+                      >
+                        <Trash size={14} weight="regular" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-      {/* Edit modal */}
-      {editingFrame && editState && (
-        <div
-          className="admin-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={(e) => { if (e.target === e.currentTarget) closeEdit(); }}
-        >
-          <div
-            className="admin-modal-panel w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-border"
-          >
-            {/* Modal header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-              <div>
-                <p className="text-[13px] font-semibold">Edit Frame</p>
-                <p className="text-[11px] text-muted mt-0.5 font-mono truncate max-w-xs">{editingFrame.slug}</p>
-              </div>
-              <button
-                type="button"
-                onClick={closeEdit}
-                title="Close"
-                className="p-1.5 rounded-lg hover:bg-surface-hover text-muted hover:text-foreground transition-colors"
+      {/* Edit Dialog */}
+      <Dialog
+        open={Boolean(editingFrame)}
+        onClose={closeEdit}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{ sx: { maxHeight: "90vh" } }}
+      >
+        <DialogTitle>
+          <Box>
+            Edit Frame
+            {editingFrame && (
+              <Typography
+                component="div"
+                sx={{ fontSize: 11, color: "text.disabled", fontFamily: "monospace", mt: 0.25, fontWeight: 400 }}
               >
-                <X size={16} weight="regular" />
-              </button>
-            </div>
+                {editingFrame.slug}
+              </Typography>
+            )}
+          </Box>
+        </DialogTitle>
 
-            {/* Form */}
-            <div className="px-6 py-5 flex flex-col gap-4">
+        {editState && (
+          <>
+            <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
 
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="frame-detail-label block mb-1.5">Title</label>
-                  <input
-                    type="text"
-                    title="Title"
-                    className="header-search-input w-full rounded-lg px-3 py-2 text-[13px]"
-                    value={editState.title}
-                    onChange={(e) => setEditState({ ...editState, title: e.target.value })}
-                  />
-                </div>
-                <div className="w-24">
-                  <label className="frame-detail-label block mb-1.5">Rank</label>
-                  <input
-                    type="number"
-                    title="Rank"
-                    className="header-search-input w-full rounded-lg px-3 py-2 text-[13px]"
-                    value={editState.rank}
-                    onChange={(e) => setEditState({ ...editState, rank: Number(e.target.value) })}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="frame-detail-label block mb-1.5">Slug</label>
-                <input
-                  type="text"
-                  title="Slug"
-                  className="header-search-input w-full rounded-lg px-3 py-2 text-[13px] font-mono"
-                  value={editState.slug}
-                  onChange={(e) => setEditState({ ...editState, slug: e.target.value })}
+              {/* Title + Rank */}
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <TextField
+                  label="Title"
+                  value={editState.title}
+                  onChange={(e) => setEditState({ ...editState, title: e.target.value })}
+                  fullWidth
+                  size="small"
                 />
-              </div>
-
-              <div>
-                <label className="frame-detail-label block mb-1.5">Description</label>
-                <textarea
-                  rows={3}
-                  title="Description"
-                  className="header-search-input w-full rounded-lg px-3 py-2 text-[13px] resize-none"
-                  value={editState.description}
-                  onChange={(e) => setEditState({ ...editState, description: e.target.value })}
+                <TextField
+                  label="Rank"
+                  type="number"
+                  value={editState.rank}
+                  onChange={(e) => setEditState({ ...editState, rank: Number(e.target.value) })}
+                  sx={{ width: 100 }}
+                  size="small"
                 />
-              </div>
+              </Box>
 
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="frame-detail-label block mb-1.5">Category</label>
-                  <select
-                    title="Category"
-                    className="header-search-input w-full rounded-lg px-3 py-2 text-[13px]"
+              {/* Slug */}
+              <TextField
+                label="Slug"
+                value={editState.slug}
+                onChange={(e) => setEditState({ ...editState, slug: e.target.value })}
+                fullWidth
+                size="small"
+                inputProps={{ style: { fontFamily: "monospace", fontSize: 12 } }}
+              />
+
+              {/* Description */}
+              <TextField
+                label="Description"
+                value={editState.description}
+                onChange={(e) => setEditState({ ...editState, description: e.target.value })}
+                multiline
+                rows={3}
+                fullWidth
+                size="small"
+              />
+
+              {/* Category + Creator */}
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Category</InputLabel>
+                  <Select
                     value={editState.category_id}
+                    label="Category"
                     onChange={(e) => setEditState({ ...editState, category_id: e.target.value })}
                   >
-                    <option value="">— None —</option>
+                    <MenuItem value="">— None —</MenuItem>
                     {categories.map((c) => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
+                      <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
                     ))}
-                  </select>
-                </div>
-                <div className="flex-1">
-                  <label className="frame-detail-label block mb-1.5">Creator</label>
-                  <select
-                    title="Creator"
-                    className="header-search-input w-full rounded-lg px-3 py-2 text-[13px]"
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth size="small">
+                  <InputLabel>Creator</InputLabel>
+                  <Select
                     value={editState.creator_id}
+                    label="Creator"
                     onChange={(e) => setEditState({ ...editState, creator_id: e.target.value })}
                   >
-                    <option value="">— None —</option>
+                    <MenuItem value="">— None —</MenuItem>
                     {creators.map((c) => (
-                      <option key={c.id} value={c.id}>{c.display_name}</option>
+                      <MenuItem key={c.id} value={c.id}>{c.display_name}</MenuItem>
                     ))}
-                  </select>
-                </div>
-              </div>
+                  </Select>
+                </FormControl>
+              </Box>
 
-              <div>
-                <label className="frame-detail-label block mb-1.5">Tags <span className="normal-case tracking-normal">(comma-separated)</span></label>
-                <input
-                  className="header-search-input w-full rounded-lg px-3 py-2 text-[13px]"
-                  value={editState.tags}
-                  onChange={(e) => setEditState({ ...editState, tags: e.target.value })}
-                  placeholder="tag1, tag2, tag3"
-                />
-              </div>
+              {/* Tags */}
+              <TextField
+                label="Tags (comma-separated)"
+                value={editState.tags}
+                onChange={(e) => setEditState({ ...editState, tags: e.target.value })}
+                fullWidth
+                size="small"
+                placeholder="tag1, tag2, tag3"
+              />
 
-              <div>
-                <label className="frame-detail-label block mb-1.5">Technique Notes</label>
-                <textarea
-                  rows={2}
-                  title="Technique Notes"
-                  className="header-search-input w-full rounded-lg px-3 py-2 text-[13px] resize-none"
-                  value={editState.technique_notes}
-                  onChange={(e) => setEditState({ ...editState, technique_notes: e.target.value })}
-                />
-              </div>
-            </div>
+              {/* Technique Notes */}
+              <TextField
+                label="Technique Notes"
+                value={editState.technique_notes}
+                onChange={(e) => setEditState({ ...editState, technique_notes: e.target.value })}
+                multiline
+                rows={2}
+                fullWidth
+                size="small"
+              />
+            </DialogContent>
 
-            {/* Modal footer */}
-            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-border">
-              <button
-                type="button"
-                onClick={closeEdit}
-                className="px-4 py-2 rounded-lg text-[13px] border border-border hover:bg-surface-hover transition-colors"
-              >
+            <DialogActions>
+              <Button onClick={closeEdit} variant="outlined" size="small">
                 Cancel
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
                 onClick={saveEdit}
+                variant="contained"
+                size="small"
                 disabled={saving}
-                className="px-4 py-2 rounded-lg text-[13px] font-medium bg-foreground text-background hover:opacity-80 transition-opacity disabled:opacity-50"
               >
                 {saving ? "Saving…" : "Save changes"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
     </>
   );
 }

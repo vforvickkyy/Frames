@@ -9,7 +9,13 @@
       "Bash(rm -rf d:/Node/frames-app)",
       "Bash(npm install:*)",
       "Bash(powershell.exe -Command \":*)",
-      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"d:/Node/Frames/fix-classes.ps1\")"
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"d:/Node/Frames/fix-classes.ps1\")",
+      "Bash(head -1 d:/Node/Frames/app/admin/\\\\\\(protected\\\\\\)/layout.tsx)",
+      "Bash(head -1 d:/Node/Frames/app/admin/\\\\\\(protected\\\\\\)/page.tsx)",
+      "Bash(head -1 d:/Node/Frames/app/\\\\\\(public\\\\\\)/layout.tsx)",
+      "Bash(head -1 d:/Node/Frames/app/\\\\\\(public\\\\\\)/page.tsx)",
+      "Bash(head -1 d:/Node/Frames/app/\\\\\\(public\\\\\\)/frame/[slug]/page.tsx)",
+      "Bash(npm run:*)"
     ]
   }
 }

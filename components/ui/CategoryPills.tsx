@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import type { Category } from "@/types";
-
-const MotionLink = motion(Link);
 
 interface CategoryPillsProps {
   categories: Category[];
@@ -12,29 +11,35 @@ interface CategoryPillsProps {
 }
 
 export default function CategoryPills({ categories, activeSlug }: CategoryPillsProps) {
+  const router = useRouter();
+
   return (
-    <div className="flex gap-2 overflow-x-auto scrollbar-none py-1">
-      <MotionLink
-        href="/"
-        whileHover={{ scale: 1.04 }}
-        whileTap={{ scale: 0.97 }}
-        transition={{ duration: 0.15 }}
-        className={`pill shrink-0 ${!activeSlug ? "pill-active" : ""}`}
-      >
-        All
-      </MotionLink>
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        overflowX: "auto",
+        py: 0.25,
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": { display: "none" },
+      }}
+    >
+      <Chip
+        label="All"
+        variant={!activeSlug ? "filled" : "outlined"}
+        onClick={() => router.push("/")}
+        sx={{ flexShrink: 0, cursor: "pointer" }}
+      />
       {categories.map((cat) => (
-        <MotionLink
+        <Chip
           key={cat.id}
-          href={`/category/${cat.slug}`}
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ duration: 0.15 }}
-          className={`pill shrink-0 ${activeSlug === cat.slug ? "pill-active" : ""}`}
-        >
-          {cat.name}
-        </MotionLink>
+          label={cat.name}
+          variant={activeSlug === cat.slug ? "filled" : "outlined"}
+          onClick={() => router.push(`/category/${cat.slug}`)}
+          sx={{ flexShrink: 0, cursor: "pointer" }}
+        />
       ))}
-    </div>
+    </Box>
   );
 }

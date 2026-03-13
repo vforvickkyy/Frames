@@ -1,5 +1,6 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Box from "@mui/material/Box";
 
 export default function PublicLayout({
   children,
@@ -7,10 +8,12 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Header />
-      <main className="pt-13 min-h-screen w-full">{children}</main>
+      <Box component="main" sx={{ pt: "52px", flex: 1, width: "100%" }}>
+        {children}
+      </Box>
       <Footer />
-    </>
+    </Box>
   );
 }

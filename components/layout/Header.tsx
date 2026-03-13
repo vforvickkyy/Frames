@@ -1,10 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { MagnifyingGlass, Moon, Sun } from "@phosphor-icons/react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import { useTheme, alpha } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { MagnifyingGlass, Moon, Sun, List, X } from "@phosphor-icons/react";
+import { useThemeToggle } from "@/components/providers/AppProvider";
+
+const MotionAppBar = motion(AppBar);
 
 const navLinks = [
   { href: "/", label: "Discover" },
@@ -15,146 +24,230 @@ const navLinks = [
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
+  const theme = useTheme();
+  const { isDark, toggle } = useThemeToggle();
+  const isMd = useMediaQuery(theme.breakpoints.up("md"));
+
   const [query, setQuery] = useState("");
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [dark, setDark] = useState(true);
+  const [focused, setFocused] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    const isDark = saved ? saved !== "light" : true;
-    setDark(isDark);
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-  }, []);
-
   useEffect(() => { setMobileOpen(false); }, [pathname]);
-
-  function toggleTheme() {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
-    localStorage.setItem("theme", next ? "dark" : "light");
-  }
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       setQuery("");
-      setSearchFocused(false);
+      setFocused(false);
     }
   }
 
   return (
-    <motion.header
+    <MotionAppBar
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b"
-      style={{
-        background: "color-mix(in srgb, var(--bg) 80%, transparent)",
-        borderColor: "var(--border)",
+      position="fixed"
+      elevation={0}
+      sx={{
         height: 52,
+        background: alpha(theme.palette.background.default, 0.85),
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        boxShadow: "none",
+        zIndex: theme.zIndex.appBar,
+        color: theme.palette.text.primary,
       }}
     >
-      <div className="max-w-7xl mx-auto px-5 h-full flex items-center gap-6">
-
+      <Box
+        sx={{
+          maxWidth: "88rem",
+          mx: "auto",
+          px: { xs: 2, md: 3 },
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: { xs: 2, md: 3 },
+          width: "100%",
+        }}
+      >
         {/* Logo */}
-        <Link
+        <Box
+          component={Link}
           href="/"
-          className="shrink-0 text-[14px] font-semibold tracking-tight transition-opacity hover:opacity-60"
-          style={{ color: "var(--text)" }}
+          sx={{
+            flexShrink: 0,
+            fontSize: 14,
+            fontWeight: 600,
+            letterSpacing: "-0.02em",
+            color: theme.palette.text.primary,
+            textDecoration: "none",
+            transition: "opacity 0.15s ease",
+            "&:hover": { opacity: 0.55 },
+          }}
         >
           Frames
-        </Link>
+        </Box>
 
-        {/* Nav links */}
-        <nav className="hidden md:flex items-center gap-1 shrink-0">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-3 py-1.5 rounded-lg text-sm transition-colors duration-150"
-              style={{
-                color: pathname === link.href ? "var(--text)" : "var(--text-muted)",
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        {/* Desktop nav */}
+        {isMd && (
+          <Box component="nav" sx={{ display: "flex", alignItems: "center", gap: 0.25, flexShrink: 0 }}>
+            {navLinks.map((link) => (
+              <Box
+                key={link.href}
+                component={Link}
+                href={link.href}
+                sx={{
+                  px: 1.5,
+                  py: 0.75,
+                  borderRadius: 1.5,
+                  fontSize: 13,
+                  fontWeight: 450,
+                  letterSpacing: "-0.01em",
+                  color: pathname === link.href
+                    ? theme.palette.text.primary
+                    : theme.palette.text.secondary,
+                  textDecoration: "none",
+                  transition: "color 0.12s ease",
+                  "&:hover": { color: theme.palette.text.primary },
+                }}
+              >
+                {link.label}
+              </Box>
+            ))}
+          </Box>
+        )}
 
         {/* Search — center, expands on focus */}
-        <form onSubmit={handleSearch} className="flex-1 flex justify-center">
+        <Box
+          component="form"
+          onSubmit={handleSearch}
+          sx={{ flex: 1, display: "flex", justifyContent: "center" }}
+        >
           <motion.div
-            animate={{ width: searchFocused ? 460 : 380 }}
+            animate={{ width: focused ? 460 : 360 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative flex items-center"
+            style={{ position: "relative", display: "flex", alignItems: "center", maxWidth: "100%" }}
           >
-            <MagnifyingGlass
-              size={15}
-              weight="regular"
-              className="absolute left-3.5 pointer-events-none"
-              style={{ color: "var(--text-muted)" }}
-            />
-            <input
-              type="text"
+            <InputBase
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
               placeholder="Search frames…"
-              className="header-search-input w-full pl-9 pr-4 py-1.5 rounded-full text-sm"
+              inputProps={{ "aria-label": "search" }}
+              startAdornment={
+                <MagnifyingGlass
+                  size={14}
+                  weight="regular"
+                  style={{
+                    marginLeft: 14,
+                    marginRight: 6,
+                    color: theme.palette.text.disabled,
+                    flexShrink: 0,
+                  }}
+                />
+              }
+              sx={{
+                width: "100%",
+                height: 34,
+                background: theme.palette.background.paper,
+                border: `1px solid ${
+                  focused
+                    ? alpha(theme.palette.text.primary, 0.15)
+                    : theme.palette.divider
+                }`,
+                borderRadius: "9999px",
+                color: theme.palette.text.primary,
+                transition: "border-color 0.15s ease",
+                "& .MuiInputBase-input": {
+                  pr: 1.5,
+                  fontSize: 13,
+                  py: 0,
+                  "&::placeholder": {
+                    color: theme.palette.text.disabled,
+                    opacity: 1,
+                  },
+                },
+              }}
             />
           </motion.div>
-        </form>
+        </Box>
 
         {/* Theme toggle */}
-        <button
-          type="button"
-          onClick={toggleTheme}
-          className="header-icon-btn shrink-0 p-1.5 rounded-lg transition-opacity hover:opacity-60"
+        <IconButton
+          onClick={toggle}
           aria-label="Toggle theme"
+          size="small"
+          sx={{ flexShrink: 0 }}
         >
-          {dark
-            ? <Sun size={18} weight="regular" />
-            : <Moon size={18} weight="regular" />
+          {isDark
+            ? <Sun size={17} weight="regular" />
+            : <Moon size={17} weight="regular" />
           }
-        </button>
+        </IconButton>
 
         {/* Mobile menu toggle */}
-        <button
-          type="button"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="header-icon-btn md:hidden shrink-0 text-sm transition-opacity hover:opacity-60"
-        >
-          {mobileOpen ? "✕" : "☰"}
-        </button>
-      </div>
+        {!isMd && (
+          <IconButton
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+            size="small"
+            sx={{ flexShrink: 0 }}
+          >
+            {mobileOpen
+              ? <X size={17} weight="regular" />
+              : <List size={17} weight="regular" />
+            }
+          </IconButton>
+        )}
+      </Box>
 
       {/* Mobile nav */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.nav
+          <motion.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.18 }}
-            className="header-mobile-nav md:hidden px-5 pb-3 flex flex-col gap-0.5"
+            style={{
+              borderTop: `1px solid ${theme.palette.divider}`,
+              background: theme.palette.background.default,
+            }}
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="px-3 py-2 rounded-lg text-sm transition-colors"
-                style={{ color: pathname === link.href ? "var(--text)" : "var(--text-muted)" }}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </motion.nav>
+            <Box
+              component="nav"
+              sx={{ px: 2.5, py: 1.5, display: "flex", flexDirection: "column", gap: 0.25 }}
+            >
+              {navLinks.map((link) => (
+                <Box
+                  key={link.href}
+                  component={Link}
+                  href={link.href}
+                  sx={{
+                    px: 1.5,
+                    py: 1,
+                    borderRadius: 1.5,
+                    fontSize: 13,
+                    fontWeight: 450,
+                    color: pathname === link.href
+                      ? theme.palette.text.primary
+                      : theme.palette.text.secondary,
+                    textDecoration: "none",
+                    transition: "color 0.12s ease",
+                    "&:hover": { color: theme.palette.text.primary },
+                  }}
+                >
+                  {link.label}
+                </Box>
+              ))}
+            </Box>
+          </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </MotionAppBar>
   );
 }
